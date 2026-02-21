@@ -16,12 +16,16 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.GroundHarvesterSubsystem;
 import frc.robot.subsystems.HarvesterSubsystem;
 import frc.robot.subsystems.ShooterSubsytem;
 import frc.robot.subsystems.TriggerSubsystem;
+
 
 public class RobotContainer {
     private double MaxSpeed = .5 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top
@@ -56,8 +60,14 @@ public class RobotContainer {
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
     public RobotContainer() {
-        configureBindings();
 
+        NamedCommands.registerCommand("shoot", Commands.runOnce(() -> {
+            System.out.println("shooting...");
+        }));
+
+        drivetrain.configurePathPlanner();
+        
+        configureBindings();
     }
 
     private void configureBindings() {
@@ -143,18 +153,24 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        // Simple drive forward auton
-        final var idle = new SwerveRequest.Idle();
-        return Commands.sequence(
-                // Reset our field centric heading to match the robot
-                // facing away from our alliance station wall (0 deg).
-                drivetrain.runOnce(() -> drivetrain.seedFieldCentric(Rotation2d.kZero)),
-                // Then slowly drive forward (away from us) for 5 seconds.
-                drivetrain.applyRequest(() -> drive.withVelocityX(0.5)
-                        .withVelocityY(0)
-                        .withRotationalRate(0))
-                        .withTimeout(5.0),
-                // Finally idle for the rest of auton
-                drivetrain.applyRequest(() -> idle));
+        // // Simple drive forward auton
+        // final var idle = new SwerveRequest.Idle();
+        // return Commands.sequence(
+        //     // Reset our field centric heading to match the robot
+        //     // facing away from our alliance station wall (0 deg).
+        //     drivetrain.runOnce(() -> drivetrain.seedFieldCentric(Rotation2d.kZero)),
+        //     // Then slowly drive forward (away from us) for 5 seconds.
+        //     drivetrain.applyRequest(() ->
+        //         drive.withVelocityX(0.5)
+        //             .withVelocityY(0)
+        //             .withRotationalRate(0)
+        //     )
+        //     .withTimeout(5.0),
+        //     // Finally idle for the rest of auton
+        //     drivetrain.applyRequest(() -> idle)
+        // );
+        
+        // return new PathPlannerAuto("SlowTestAuto");
+        return new PathPlannerAuto("ShootTest");
     }
 }

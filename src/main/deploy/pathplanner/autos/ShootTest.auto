@@ -5,15 +5,9 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "SlowTest"
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": null
+            "name": "shoot"
           }
         }
       ]

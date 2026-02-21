@@ -24,27 +24,23 @@ import frc.robot.subsystems.ShooterSubsytem;
 import frc.robot.subsystems.TriggerSubsystem;
 
 public class RobotContainer {
-    private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-    private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
-    //not swerev variables 
-    //private final CommandXboxController driveStick= new CommandXboxController(1);
-    private final CommandXboxController shootStick = new CommandXboxController(1);
+    private double MaxSpeed = .5 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top
+                                                                                       // speed
+    private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second
+                                                                                      // max angular velocity
+    // not swerev variables
+    // private final CommandXboxController driveStick= new CommandXboxController(1);
+    private final CommandXboxController codriverController = new CommandXboxController(1);
 
     private final ShooterSubsytem shooter = new ShooterSubsytem();
     private final TriggerSubsystem trigger = new TriggerSubsystem();
 
     private final HarvesterSubsystem harv = new HarvesterSubsystem();
-    //private final HarvesterCommand harvest = new HarvesterCommand(harv);
+    // private final HarvesterCommand harvest = new HarvesterCommand(harv);
 
     private final GroundHarvesterSubsystem groundHarv = new GroundHarvesterSubsystem();
-  //private final GroundHarvesterCommand groundHarvest = new GroundHarvesterCommand(groundHarv);
-
-
-
-
-
-
-
+    // private final GroundHarvesterCommand groundHarvest = new
+    // GroundHarvesterCommand(groundHarv);
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -55,119 +51,110 @@ public class RobotContainer {
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
-    private final CommandXboxController joystick = new CommandXboxController(0);
+    private final CommandXboxController driverController = new CommandXboxController(0);
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
     public RobotContainer() {
         configureBindings();
-       
+
     }
 
     private void configureBindings() {
-        //buttons we made 
+        // buttons we made
         bindJoystickX();
-        //bindJoysticky();
+        // bindJoysticky();
         bindJoystickA();
-        //bindJoyStickb();
+        // bindJoyStickb();
 
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(
-            // Drivetrain will execute this command periodically
-            drivetrain.applyRequest(() ->
-                drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
-                    .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-                    .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
-            )
-        );
+                // Drivetrain will execute this command periodically
+                drivetrain.applyRequest(() -> drive.withVelocityX(-driverController.getLeftY() * MaxSpeed) // Drive
+                                                                                                           // forward
+                                                                                                           // with
+                                                                                                           // negative Y
+                                                                                                           // (forward)
+                        .withVelocityY(-driverController.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+                        .withRotationalRate(-driverController.getRightX() * MaxAngularRate) // Drive counterclockwise
+                                                                                            // with negative X (left)
+                ));
 
         // Idle while the robot is disabled. This ensures the configured
         // neutral mode is applied to the drive motors while disabled.
         final var idle = new SwerveRequest.Idle();
         RobotModeTriggers.disabled().whileTrue(
-            drivetrain.applyRequest(() -> idle).ignoringDisable(true)
-        );
+                drivetrain.applyRequest(() -> idle).ignoringDisable(true));
 
-        joystick.y().whileTrue(drivetrain.applyRequest(() -> brake));
-        joystick.b().whileTrue(drivetrain.applyRequest(() ->
-            point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
-        ));
+        driverController.y().whileTrue(drivetrain.applyRequest(() -> brake));
+        // driverController.b().whileTrue(drivetrain.applyRequest(() ->
+        // point.withModuleDirection(new Rotation2d(-driverController.getLeftY(),
+        // -driverController.getLeftX()))
+        // ));
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
-        joystick.back().and(joystick.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
-        joystick.back().and(joystick.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
-        joystick.start().and(joystick.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
-        joystick.start().and(joystick.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
+        driverController.back().and(driverController.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
+        driverController.back().and(driverController.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
+        driverController.start().and(driverController.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
+        driverController.start().and(driverController.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
         // Reset the field-centric heading on left bumper press.
-        joystick.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
+        driverController.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }
 
     private void bindJoystickA() {
 
+        // runs the trigger (bottom row of wheels on the shooter)
+        codriverController.a().toggleOnTrue(
+                trigger.startEnd(
+                        () -> trigger.runTrigger(), // Start action
+                        () -> trigger.stopTrigger() // End action
+                ));
 
-    //runs the trigger (bottom row of wheels on the shooter)
-    shootStick.a().toggleOnTrue(
-      trigger.startEnd(
-             () -> trigger.runTrigger(), // Start action
-             () -> trigger.stopTrigger() // End action
-         )
-         );
+        // toggle ground harvest on and off with the press of a button
+        driverController.a().toggleOnTrue(
 
+                groundHarv.startEnd(
+                        () -> groundHarv.runGroundHarvest(),
+                        () -> groundHarv.stopHarvest()));
+    }
 
-           
+    private void bindJoystickX() {
 
-    //toggle ground harvest on and off with the press of a button 
-    joystick.a().toggleOnTrue(
-      groundHarv.startEnd(
-        () -> groundHarv.runGroundHarvest(),
-        () -> groundHarv.stopHarvest()
-      )
-    );
-  }
+        // shoots the shooter
+        codriverController.x().toggleOnTrue(
+                shooter.startEnd(
+                        () -> shooter.runShooter(), // Start action
+                        () -> shooter.stopShooter() // End action
+                ));
 
-   private void bindJoystickX() { 
+        // runs the drop down harvester
 
+        driverController.x().toggleOnTrue(
+                harv.startEnd(
+                        () -> harv.runDropHarvest(), // Start action
+                        () -> harv.stopDropHarvest() // End action
+                ));
 
-//shoots the shooter
-shootStick.x().toggleOnTrue(
-      shooter.startEnd(
-           () -> shooter.runShooter(), // Start action
-            () ->  shooter.stopShooter() // End action
-         )
-         );
-
-  //runs the drop down harvester
-
-  joystick.x().toggleOnTrue(
-      harv.startEnd(
-             () -> harv.runDropHarvest(), // Start action
-             () -> harv.stopDropHarvest() // End action
-         )
-         );
-        
-  }
+    }
 
     public Command getAutonomousCommand() {
         // Simple drive forward auton
         final var idle = new SwerveRequest.Idle();
         return Commands.sequence(
-            // Reset our field centric heading to match the robot
-            // facing away from our alliance station wall (0 deg).
-            drivetrain.runOnce(() -> drivetrain.seedFieldCentric(Rotation2d.kZero)),
-            // Then slowly drive forward (away from us) for 5 seconds.
-            drivetrain.applyRequest(() ->
-                drive.withVelocityX(0.5)
-                    .withVelocityY(0)
-                    .withRotationalRate(0)
-            )
-            .withTimeout(5.0),
-            // Finally idle for the rest of auton
-            drivetrain.applyRequest(() -> idle)
-        );
+                // Reset our field centric heading to match the robot
+                // facing away from our alliance station wall (0 deg).
+                drivetrain.runOnce(() -> drivetrain.seedFieldCentric(Rotation2d.kZero)),
+                // Then slowly drive forward (away from us) for 5 seconds.
+                drivetrain.applyRequest(() -> drive.withVelocityX(0.5)
+                        .withVelocityY(0)
+                        .withRotationalRate(0))
+                        .withTimeout(5.0),
+                // Finally idle for the rest of auton
+                drivetrain.applyRequest(() -> idle));
     }
 }

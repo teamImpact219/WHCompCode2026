@@ -11,35 +11,31 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 public class HarvesterSubsystem extends SubsystemBase {
-  private final SparkMax runDropHarvester  = new SparkMax(16, MotorType.kBrushless);
-  private final TalonFX dropHarvest  = new TalonFX(18); //ID THIS
+  private final SparkMax harvesterIntake  = new SparkMax(16, MotorType.kBrushless);
+  private final TalonFX harvesterDrop  = new TalonFX(18); //ID THIS
   private final DigitalInput topSwitch = new DigitalInput(0);
   private final DigitalInput botSwitch = new DigitalInput(1);
 
-  public void runDropHarvest(){
-    runDropHarvester.set(1);
+  public void runHarvesterIntake(){
+    harvesterIntake.set(1);
   }
 
-  public void stopDropHarvest(){
-    runDropHarvester.set(0);
+  public void stopHarvesterIntake(){
+    harvesterIntake.set(0);
   }
 
-  public Command dropHarvestCMD(){
-    return lowerDropHarvestCmd();
-  }
-
-  public Command raiseDropHarvestCmd() {
-    return run(() -> dropHarvest.set(-0.25))
+  public Command raiseHarvesterDropCmd() {
+    return run(() -> harvesterDrop.set(-0.25))
         .until(() -> !topSwitch.get())
         .withTimeout(1.5)
-        .finallyDo(() -> dropHarvest.set(0));
+        .finallyDo(() -> harvesterDrop.set(0));
   }
 
-  public Command lowerDropHarvestCmd() {
-    return run(() -> dropHarvest.set(0.25))
+  public Command lowerHarvesterDropCmd() {
+    return run(() -> harvesterDrop.set(0.25))
         .until(() -> !botSwitch.get())
         .withTimeout(1.5)
-        .finallyDo(() -> dropHarvest.set(0));
+        .finallyDo(() -> harvesterDrop.set(0));
   }
 
   /** Creates a new HarvesterSubsystem. */

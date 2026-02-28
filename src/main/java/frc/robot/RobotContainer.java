@@ -69,7 +69,7 @@ public class RobotContainer {
 
         NamedCommands.registerCommand("stopShooter", shooter.stopTalonCmd());
          
-        NamedCommands.registerCommand("DropHarvester", harv.dropHarvestCMD());
+        NamedCommands.registerCommand("DropHarvester", harv.lowerHarvesterDropCmd());
 
         NamedCommands.registerCommand("LongShot", shooter.runLongShotCmd());
        
@@ -139,7 +139,7 @@ public class RobotContainer {
     }
 
      private void bindJoystickY() {
-        driverController.y().onTrue(harv.raiseDropHarvestCmd());
+        driverController.y().onTrue(harv.raiseHarvesterDropCmd());
     }
 
     private void bindJoystickX() {
@@ -155,8 +155,8 @@ public class RobotContainer {
 
         driverController.x().toggleOnTrue(
                 harv.startEnd(
-                        () -> harv.runDropHarvest(), // Start action
-                        () -> harv.stopDropHarvest() // End action
+                        () -> harv.runHarvesterIntake(), // Start action
+                        () -> harv.stopHarvesterIntake() // End action
                 ));
         // driverController.x().onTrue(
         //         harv.runOnce(
@@ -166,7 +166,7 @@ public class RobotContainer {
 
     }
      private void bindJoystickB() {
-        driverController.b().onTrue(harv.lowerDropHarvestCmd());
+        driverController.b().onTrue(harv.lowerHarvesterDropCmd());
     }
 
     public Command getAutonomousCommand() {

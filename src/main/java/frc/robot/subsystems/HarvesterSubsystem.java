@@ -17,9 +17,14 @@ public class HarvesterSubsystem extends SubsystemBase {
   private final XboxController driveStick = new XboxController(0);
   private final SparkMax runDropHarvester  = new SparkMax(16, MotorType.kBrushless);
   //private final SparkMax dropHarvest = new SparkMax(17, MotorType.kBrushless);
-  private final TalonFX dropHarvest  = new TalonFX(18); //ID THIS
+  private final TalonFX dropHarvest  = new TalonFX(17);
+   //negative in up
+  //positive is down
+
   private final DigitalInput topSwitch = new DigitalInput(0);
   private final DigitalInput botSwitch = new DigitalInput(1);
+
+
 
 
   //make it a hold until it reaches the limit switch. 
@@ -59,7 +64,7 @@ public class HarvesterSubsystem extends SubsystemBase {
      
 
       while(topSwitch.get() || (System.currentTimeMillis()- startTime) < 1500){
-        dropHarvest.set(-.25);
+        dropHarvest.set(-.12);
       }
       if(topSwitch.get() || (System.currentTimeMillis()- startTime) < 1500){
         dropHarvest.set(0);
@@ -78,7 +83,7 @@ public class HarvesterSubsystem extends SubsystemBase {
 
       }
       while(botSwitch.get() || (System.currentTimeMillis()- startTime) < 1500){
-        dropHarvest.set(.25);
+        dropHarvest.set(.12);
         
       }
 

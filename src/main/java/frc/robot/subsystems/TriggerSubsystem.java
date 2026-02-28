@@ -11,18 +11,27 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class TriggerSubsystem extends SubsystemBase {
    private final SparkMax trigger  = new SparkMax(15, MotorType.kBrushless);
-   private final SparkMax agitator  = new SparkMax(17, MotorType.kBrushless); // ID THIS
+   private final SparkMax agitator  = new SparkMax(18, MotorType.kBrushless); 
+
 
 
 
    public void runTrigger(){
-    agitator.set(0.5);
+   agitator.set(0.2);
     trigger.set(-1);
+   }
+
+   public void debugAgitator(){
+    agitator.set(0.2);
+   }
+
+    public void stopDebugAgitator(){
+    agitator.set(0);
    }
 
    public void stopTrigger(){
     trigger.set(0);
-    agitator.set(0);
+   agitator.set(0);
    }
 
 

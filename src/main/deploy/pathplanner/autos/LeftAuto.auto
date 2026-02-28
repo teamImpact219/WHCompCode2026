@@ -37,25 +37,31 @@
         {
           "type": "named",
           "data": {
-            "name": "stopTrigger"
+            "name": "stopShooter"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "stopShooter"
+            "name": "stopTrigger"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "RightStartToHuman"
+            "pathName": "CloseShotToPit"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "HumanToLongShotSpot"
+            "pathName": "ColectFromPit"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FromPitToLongShot"
           }
         },
         {
@@ -79,19 +85,19 @@
         {
           "type": "named",
           "data": {
-            "name": "stopTrigger"
+            "name": "stopShooter"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "stopShooter"
+            "name": "stopTrigger"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "GoMidFromShotR"
+            "pathName": "GoMidFromShotL"
           }
         }
       ]

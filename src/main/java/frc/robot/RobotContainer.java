@@ -81,6 +81,12 @@ public class RobotContainer {
         NamedCommands.registerCommand("DropHarvester", harv.dropHarvestCMD());
 
         NamedCommands.registerCommand("LongShot", shooter.runLongShotCmd());
+
+        NamedCommands.registerCommand("stopTrigger", trigger.stopTriggerCmd());
+
+        NamedCommands.registerCommand("runGroundHarvest", groundHarv.runGroundHarvestCmd());
+
+
        
 
         drivetrain.configurePathPlanner();
@@ -150,10 +156,10 @@ public class RobotContainer {
      private void bindJoysticky() {
 
         //runs the trigger (bottom row of wheels on the shooter)
-        driverController.y().onTrue(
-                harv.runOnce(
-                     ()->  harv.raiseDropHarvest() // End action
-         ) );
+        // driverController.y().onTrue(
+        //         harv.runOnce(
+        //              ()->  harv.raiseDropHarvest() // End action
+        //  ) );
     }
 
     private void bindJoystickX() {
@@ -166,26 +172,25 @@ public class RobotContainer {
                 ));
 
         // runs the drop down harvester
-
         driverController.x().toggleOnTrue(
                 harv.startEnd(
                         () -> harv.runDropHarvest(), // Start action
                         () -> harv.stopDropHarvest() // End action
                 ));
-        // driverController.x().onTrue(
+
+    }
+    //THIS IS FOR DEBUGGING THE AGITATOR UNTILL IT WORKS AS INTENED (MECHANICAL PROBLEM)
+     private void bindJoystickb() {
+
+        codriverController.b().toggleOnTrue((trigger.startEnd(
+        () -> trigger.debugAgitator(),
+        () -> trigger.stopDebugAgitator())));
+       
+        // driverController.b().onTrue(
         //         harv.runOnce(
                
         //              ()->  harv.lowerDropHarvest() // End action
         //  ) );
-
-    }
-     private void bindJoystickb() {
-       
-        driverController.b().onTrue(
-                harv.runOnce(
-               
-                     ()->  harv.lowerDropHarvest() // End action
-         ) );
 
     }
 

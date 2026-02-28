@@ -76,11 +76,11 @@ public class RobotContainer {
 
         NamedCommands.registerCommand("runTrigger", trigger.runTriggerCmd());
 
-        NamedCommands.registerCommand("stopShoot", shooter.stopTalonCmd());
+        NamedCommands.registerCommand("stopShooter", shooter.stopTalonCmd());
          
         NamedCommands.registerCommand("DropHarvester", harv.dropHarvestCMD());
 
-        NamedCommands.registerCommand("LongShot", shooter.runTalonCmd());
+        NamedCommands.registerCommand("LongShot", shooter.runLongShotCmd());
        
 
         drivetrain.configurePathPlanner();
@@ -208,7 +208,9 @@ public class RobotContainer {
         // );
         
         // return new PathPlannerAuto("SlowTestAuto");
-        return new PathPlannerAuto("RightAuto");
+        // return new PathPlannerAuto("RightAuto");
+        return new PathPlannerAuto("Straight Auto");
+        // return new PathPlannerAuto("shootTest");
         //return shooter.runTalonCmd();
        
     }

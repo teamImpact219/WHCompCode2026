@@ -9,6 +9,24 @@
           "data": {
             "pathName": "Straight"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CloseShot"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 5.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopShooter"
+          }
         }
       ]
     }

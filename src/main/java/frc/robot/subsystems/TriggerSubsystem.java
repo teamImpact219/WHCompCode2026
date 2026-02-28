@@ -28,7 +28,10 @@ public class TriggerSubsystem extends SubsystemBase {
 
    //these commands dont work for some reason
    public Command stopTriggerCmd(){
-    return runOnce(() -> trigger.set(0));
+    return runOnce(() -> {
+      trigger.set(0);
+      agitator.set(0);
+    });
    }
     public Command runTriggerCmd(){
     return runOnce(() -> trigger.set(-1));

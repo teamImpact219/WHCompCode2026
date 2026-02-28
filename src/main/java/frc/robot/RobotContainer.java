@@ -10,14 +10,19 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+//import com.pathplanner.lib.commands.FollowPathCommand;
+import com.pathplanner.lib.commands.*;
 
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -40,7 +45,7 @@ public class RobotContainer {
     private final TriggerSubsystem trigger = new TriggerSubsystem();
 
     private final HarvesterSubsystem harv = new HarvesterSubsystem();
-    // private final HarvesterCommand harvest = new HarvesterCommand(harv);
+    //private final HarvesterCommand harvest = new HarvesterCommand(harv);
 
     private final GroundHarvesterSubsystem groundHarv = new GroundHarvesterSubsystem();
     // private final GroundHarvesterCommand groundHarvest = new
@@ -59,11 +64,24 @@ public class RobotContainer {
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
+    //private final SendableChooser<Command> autoChooser;
+
     public RobotContainer() {
 
-        NamedCommands.registerCommand("shoot", Commands.runOnce(() -> {
-            System.out.println("shooting...");
-        }));
+        //autoChooser = AutoBuilder.buildAutoChooser("ShootTest");
+        //SmartDashboard.putData("Auto Mode", autoChooser);
+
+
+        NamedCommands.registerCommand("CloseShot",  shooter.runTalonCmd());
+
+        NamedCommands.registerCommand("runTrigger", trigger.runTriggerCmd());
+
+        NamedCommands.registerCommand("stopShoot", shooter.stopTalonCmd());
+         
+        NamedCommands.registerCommand("DropHarvester", harv.dropHarvestCMD());
+
+        NamedCommands.registerCommand("LongShot", shooter.runTalonCmd());
+       
 
         drivetrain.configurePathPlanner();
         
@@ -73,21 +91,17 @@ public class RobotContainer {
     private void configureBindings() {
         // buttons we made
         bindJoystickX();
-        // bindJoysticky();
+        bindJoysticky();
         bindJoystickA();
-        // bindJoyStickb();
+        bindJoystickb();
 
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(
                 // Drivetrain will execute this command periodically
-                drivetrain.applyRequest(() -> drive.withVelocityX(-driverController.getLeftY() * MaxSpeed) // Drive
-                                                                                                           // forward
-                                                                                                           // with
-                                                                                                           // negative Y
-                                                                                                           // (forward)
-                        .withVelocityY(-driverController.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-                        .withRotationalRate(-driverController.getRightX() * MaxAngularRate) // Drive counterclockwise
+                drivetrain.applyRequest(() -> drive.withVelocityX(-driverController.getLeftY() * Math.sqrt(Math.abs(driverController.getLeftY()))* MaxSpeed)    
+                        .withVelocityY(-driverController.getLeftX()* Math.sqrt(Math.abs(driverController.getLeftX())) * MaxSpeed) // Drive left with negative X (left)
+                        .withRotationalRate(-driverController.getRightX() * Math.sqrt(Math.abs(driverController.getRightX())) * MaxAngularRate) // Drive counterclockwise
                                                                                             // with negative X (left)
                 ));
 
@@ -97,7 +111,7 @@ public class RobotContainer {
         RobotModeTriggers.disabled().whileTrue(
                 drivetrain.applyRequest(() -> idle).ignoringDisable(true));
 
-        driverController.y().whileTrue(drivetrain.applyRequest(() -> brake));
+        // driverController.y().whileTrue(drivetrain.applyRequest(() -> brake));
         // driverController.b().whileTrue(drivetrain.applyRequest(() ->
         // point.withModuleDirection(new Rotation2d(-driverController.getLeftY(),
         // -driverController.getLeftX()))
@@ -133,6 +147,15 @@ public class RobotContainer {
                         () -> groundHarv.stopHarvest()));
     }
 
+     private void bindJoysticky() {
+
+        //runs the trigger (bottom row of wheels on the shooter)
+        driverController.y().onTrue(
+                harv.runOnce(
+                     ()->  harv.raiseDropHarvest() // End action
+         ) );
+    }
+
     private void bindJoystickX() {
 
         // shoots the shooter
@@ -149,6 +172,20 @@ public class RobotContainer {
                         () -> harv.runDropHarvest(), // Start action
                         () -> harv.stopDropHarvest() // End action
                 ));
+        // driverController.x().onTrue(
+        //         harv.runOnce(
+               
+        //              ()->  harv.lowerDropHarvest() // End action
+        //  ) );
+
+    }
+     private void bindJoystickb() {
+       
+        driverController.b().onTrue(
+                harv.runOnce(
+               
+                     ()->  harv.lowerDropHarvest() // End action
+         ) );
 
     }
 
@@ -171,6 +208,8 @@ public class RobotContainer {
         // );
         
         // return new PathPlannerAuto("SlowTestAuto");
-        return new PathPlannerAuto("ShootTest");
+        return new PathPlannerAuto("RightAuto");
+        //return shooter.runTalonCmd();
+       
     }
 }

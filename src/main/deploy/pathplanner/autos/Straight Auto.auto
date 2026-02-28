@@ -7,13 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "SlowTest"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": null
+            "pathName": "Straight"
           }
         }
       ]

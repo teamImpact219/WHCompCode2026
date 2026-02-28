@@ -14,7 +14,11 @@ public class ShooterSubsytem extends SubsystemBase {
    //private final CommandXboxController shootStick = new CommandXboxController(1);
 
    public void runShooter(){
-    shooter.set(-.3);
+    shooter.set(-0.83);
+   }
+
+   public void runLongShot(){
+    shooter.set(-0.1);
    }
 
    public void stopShooter(){
@@ -25,8 +29,12 @@ public class ShooterSubsytem extends SubsystemBase {
 
    //these commands dont work for some reason
   public Command runTalonCmd(){
-    //return runOnce(() -> shooter.set(-.83));
-     return runOnce(() -> shooter.set(-0.2));
+    return runOnce(() -> shooter.set(-0.83));
+    
+  }
+
+  public Command runLongShotCmd(){
+    return runOnce(() -> shooter.set(-1));
   }
 
   public Command stopTalonCmd(){

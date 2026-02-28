@@ -7,13 +7,25 @@
         {
           "type": "named",
           "data": {
-            "name": "DropHarvester"
+            "name": "Dropharvest"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "runTrigger"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "CloseShot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopShooter"
           }
         },
         {
@@ -26,6 +38,12 @@
           "type": "path",
           "data": {
             "pathName": "HumanToLongShotSpot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "runTrigger"
           }
         },
         {

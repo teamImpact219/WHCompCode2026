@@ -45,31 +45,58 @@ public class HarvesterSubsystem extends SubsystemBase {
     runDropHarvester.set(0);
   }
 
+
+  public void raiseDropHarvestDebug(){
+    dropHarvest.set(.12);
+   // System.out.println(topSwitch.get());
+  }
+
+   public void stopMoving(){
+    dropHarvest.set(0);
+  }
+
+  public void lowerDropHarvestDebug(){
+    //System.out.println(botSwitch.get());
+    //dropHarvest.set(-.12);
+  }
+
+
+
+
   public Command dropHarvestCMD(){
     return runOnce(() -> lowerDropHarvest());
   };
 
+  public Command raiseHarvestCmd(){
+    return runOnce(() -> raiseDropHarvest());
+  };
+
+  public Command runHarvCmd(){
+    return runOnce(() -> runDropHarvest());
+  };
+
+
+  public Command stopHarvCmd(){
+    return runOnce(() -> stopDropHarvest());
+  };
+
+
   public void raiseDropHarvest(){
     double startTime = System.currentTimeMillis();
-
-  
+    System.out.println(!topSwitch.get());
 
     //dropHarvest.set(.2);
-    System.out.println(topSwitch.get());
-    
-      if(!topSwitch.get()){
+
+    if(!topSwitch.get()){
         dropHarvest.set(0);
 
       }
-     
+      while(topSwitch.get() && (System.currentTimeMillis()- startTime) < 2000){
+        dropHarvest.set(.15);
+        
+      }
+      dropHarvest.set(0);
 
-      while(topSwitch.get() || (System.currentTimeMillis()- startTime) < 1500){
-        dropHarvest.set(-.12);
-      }
-      if(topSwitch.get() || (System.currentTimeMillis()- startTime) < 1500){
-        dropHarvest.set(0);
-      }
-    
   }
 
   public void lowerDropHarvest(){
@@ -82,15 +109,11 @@ public class HarvesterSubsystem extends SubsystemBase {
         dropHarvest.set(0);
 
       }
-      while(botSwitch.get() || (System.currentTimeMillis()- startTime) < 1500){
-        dropHarvest.set(.12);
+      while(botSwitch.get() && (System.currentTimeMillis()- startTime) < 2000){
+        dropHarvest.set(-.15);
         
       }
-
-      if(!botSwitch.get()|| (System.currentTimeMillis()- startTime) < 1500){
-        dropHarvest.set(0);
-
-      }
+      dropHarvest.set(0);
 
   }
 

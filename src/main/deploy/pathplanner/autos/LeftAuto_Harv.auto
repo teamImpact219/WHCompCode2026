@@ -11,7 +11,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "BackToWall"
+                  "pathName": "BackToWall_Harv"
                 }
               },
               {
@@ -38,25 +38,25 @@
         {
           "type": "named",
           "data": {
-            "name": "runGroundHarvest"
+            "name": "runHarv"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "UpWall"
+            "pathName": "UpWall_Harv"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "stopGroundHarvest"
+            "name": "stopHarv"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "ToShootLoc"
+            "pathName": "ToShoot_Harv"
           }
         },
         {
@@ -68,7 +68,31 @@
         {
           "type": "wait",
           "data": {
+            "waitTime": 2.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "RaiseHarvest"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
             "waitTime": 3.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Dropharvest"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopAgitator"
           }
         },
         {
@@ -81,12 +105,6 @@
           "type": "named",
           "data": {
             "name": "stopTrigger"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "stopAgitator"
           }
         }
       ]

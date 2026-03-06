@@ -6,6 +6,7 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
@@ -24,18 +25,34 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 //import com.pathplanner.lib.commands.FollowPathCommand;
 import com.pathplanner.lib.commands.*;
 
-import frc.robot.generated.TunerConstants;
+import frc.robot.generated.TunerConstants3;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.GroundHarvesterSubsystem;
 import frc.robot.subsystems.HarvesterSubsystem;
 import frc.robot.subsystems.ShooterSubsytem;
+import frc.robot.subsystems.SpeedSubsystem;
 import frc.robot.subsystems.TriggerSubsystem;
 
+import edu.wpi.first.wpilibj2.command.Subsystem;
 
-public class RobotContainer {
-    private double MaxSpeed = .5 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+
+
+
+public class RobotContainer extends SubsystemBase{
+        private final SpeedSubsystem SPEED = new SpeedSubsystem();
+
+        //private double slowSpeed=.25;
+       // private double speed=SPEED.getSpeed();
+
+
+
+
+
+    private double MaxSpeed = .5 * TunerConstants3.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top
                                                                                        // speed
-    private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second
+    private double MaxAngularRate = RotationsPerSecond.of(0.50).in(RadiansPerSecond); //was .75 now .5 2-28-26        3/4 of a rotation per second
                                                                                       // max angular velocity
     // not swerev variables
     // private final CommandXboxController driveStick= new CommandXboxController(1);
@@ -51,9 +68,11 @@ public class RobotContainer {
     // private final GroundHarvesterCommand groundHarvest = new
     // GroundHarvesterCommand(groundHarv);
 
+    
+
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-            .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
+            .withDeadband(MaxSpeed * 0.2).withRotationalDeadband(MaxAngularRate * 0.2) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
@@ -62,11 +81,14 @@ public class RobotContainer {
 
     private final CommandXboxController driverController = new CommandXboxController(0);
 
-    public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+    public final CommandSwerveDrivetrain drivetrain = TunerConstants3.createDrivetrain();
+
 
     //private final SendableChooser<Command> autoChooser;
 
     public RobotContainer() {
+
+
 
         //autoChooser = AutoBuilder.buildAutoChooser("ShootTest");
         //SmartDashboard.putData("Auto Mode", autoChooser);
@@ -78,13 +100,26 @@ public class RobotContainer {
 
         NamedCommands.registerCommand("stopShooter", shooter.stopTalonCmd());
          
-        NamedCommands.registerCommand("DropHarvester", harv.dropHarvestCMD());
+        NamedCommands.registerCommand("Dropharvest", harv.dropHarvestCMD());
+
+        NamedCommands.registerCommand("RaiseHarvest", harv.raiseHarvestCmd());
 
         NamedCommands.registerCommand("LongShot", shooter.runLongShotCmd());
 
         NamedCommands.registerCommand("stopTrigger", trigger.stopTriggerCmd());
 
         NamedCommands.registerCommand("runGroundHarvest", groundHarv.runGroundHarvestCmd());
+
+        NamedCommands.registerCommand("runAgitator", trigger.runAgitatorCmd2());
+
+        NamedCommands.registerCommand("stopAgitator", trigger.stopAgitatorCmd2());
+
+        NamedCommands.registerCommand("stopGroundHarvest", groundHarv.stopGroundHarvestCmd());
+        
+        NamedCommands.registerCommand("runHarv", harv.runHarvCmd());
+
+        NamedCommands.registerCommand("stopHarv", harv.stopHarvCmd());
+
 
 
        
@@ -100,16 +135,24 @@ public class RobotContainer {
         bindJoysticky();
         bindJoystickA();
         bindJoystickb();
+        //bindLeftTrigger();
+        //bindRightTrigger();
+        //bindLeftDPad();
 
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(
-                // Drivetrain will execute this command periodically
-                drivetrain.applyRequest(() -> drive.withVelocityX(-driverController.getLeftY() * Math.sqrt(Math.abs(driverController.getLeftY()))* MaxSpeed)    
-                        .withVelocityY(-driverController.getLeftX()* Math.sqrt(Math.abs(driverController.getLeftX())) * MaxSpeed) // Drive left with negative X (left)
-                        .withRotationalRate(-driverController.getRightX() * Math.sqrt(Math.abs(driverController.getRightX())) * MaxAngularRate) // Drive counterclockwise
+               // Drivetrain will execute this command periodically
+                drivetrain.applyRequest(() -> drive.withVelocityX(-driverController.getLeftY() * Math.pow((driverController.getLeftY()),2)* MaxSpeed)    
+                        .withVelocityY(-driverController.getLeftX()* Math.pow((driverController.getLeftX()),2)* MaxSpeed) // Drive left with negative X (left)
+                        .withRotationalRate(-driverController.getRightX() * Math.pow((driverController.getRightX()),2)* MaxAngularRate) // Drive counterclockwise
                                                                                             // with negative X (left)
                 ));
+                // drivetrain.applyRequest(() -> drive.withVelocityX(-driverController.getLeftY() * Math.pow((driverController.getLeftY()),3)* MaxSpeed)    
+                //         .withVelocityY( Math.pow((driverController.getLeftX()),3)* MaxSpeed) // Drive left with negative X (left)
+                //         .withRotationalRate(-driverController.getRightX() * Math.pow((driverController.getRightX()),3)* MaxAngularRate) // Drive counterclockwise
+                //                                                                             // with negative X (left)
+                // ));
 
         // Idle while the robot is disabled. This ensures the configured
         // neutral mode is applied to the drive motors while disabled.
@@ -133,8 +176,26 @@ public class RobotContainer {
         // Reset the field-centric heading on left bumper press.
         driverController.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
+
+
         drivetrain.registerTelemetry(logger::telemeterize);
     }
+
+
+
+    // START OF THE BUTTON PRESSES
+
+//     private void bindLeftTrigger(){
+//         driverController.leftBumper().onTrue(              
+//                        SPEED.fastCmd()
+//         );
+//     }
+
+//     private void bindRightTrigger(){
+//         driverController.rightBumper().onTrue(              
+//                        SPEED.slowCmd()
+//         );
+//     }
 
     private void bindJoystickA() {
 
@@ -148,18 +209,28 @@ public class RobotContainer {
         // toggle ground harvest on and off with the press of a button
         driverController.a().toggleOnTrue(
 
-                groundHarv.startEnd(
-                        () -> groundHarv.runGroundHarvest(),
-                        () -> groundHarv.stopHarvest()));
+                harv.startEnd(
+                        () -> harv.runDropHarvest(),
+                        () -> harv.stopDropHarvest()));
+
+        driverController.a().toggleOnTrue(
+                trigger.startEnd(
+                        () -> trigger.runAgitatorCmd(), // Start action
+                        () -> trigger.stopAgitatorCmd() // End action
+                ));
     }
 
      private void bindJoysticky() {
+
+        codriverController.y().toggleOnTrue((harv.startEnd(
+        () -> harv.raiseDropHarvest(),
+        () -> harv.stopMoving())));
 
         //runs the trigger (bottom row of wheels on the shooter)
         // driverController.y().onTrue(
         //         harv.runOnce(
         //              ()->  harv.raiseDropHarvest() // End action
-        //  ) );
+        //  ));
     }
 
     private void bindJoystickX() {
@@ -174,25 +245,61 @@ public class RobotContainer {
         // runs the drop down harvester
         driverController.x().toggleOnTrue(
                 harv.startEnd(
-                        () -> harv.runDropHarvest(), // Start action
-                        () -> harv.stopDropHarvest() // End action
+                        () -> groundHarv.runGroundHarvest(), // Start action
+                        () -> groundHarv.stopHarvest() // End action
                 ));
 
+
+        driverController.x().toggleOnTrue(
+                trigger.startEnd(
+                        () -> trigger.runAgitatorCmd(), // Start action
+                        () -> trigger.stopAgitatorCmd() // End action
+                ));
     }
+
+
     //THIS IS FOR DEBUGGING THE AGITATOR UNTILL IT WORKS AS INTENED (MECHANICAL PROBLEM)
      private void bindJoystickb() {
 
-        codriverController.b().toggleOnTrue((trigger.startEnd(
-        () -> trigger.debugAgitator(),
-        () -> trigger.stopDebugAgitator())));
+
+        // driverController.b().toggleOnTrue((harv.startEnd(
+        // () -> harv.lowerDropHarvestDebug(),
+        // () -> harv.stopMoving())));
+
+        // codriverController.b().toggleOnTrue((trigger.startEnd(
+        // () -> trigger.debugAgitator(),
+        // () -> trigger.stopDebugAgitator())));
        
-        // driverController.b().onTrue(
-        //         harv.runOnce(
-               
-        //              ()->  harv.lowerDropHarvest() // End action
-        //  ) );
+        codriverController.b().onTrue(
+                harv.runOnce(
+                     ()->  harv.lowerDropHarvest() // End action
+         ) );
 
     }
+
+
+
+    public void bindLeftDPad(){
+       driverController.povLeft().onTrue(Commands.runOnce( () -> drivetrain.toggleFieldRelative()));    
+        }
+
+
+        public void bindRightBumber(){
+                codriverController.rightBumper().onTrue(Commands.runOnce(()->
+                shooter.runShooter()));
+        }
+
+       
+        // public void setFastSpeed(){
+        //         speed=.5;
+        // }
+       
+
+
+        //  public command fastCmd(){
+        //       return  runOnce(() -> setFastSpeed());
+        // }
+        
 
     public Command getAutonomousCommand() {
         // // Simple drive forward auton
@@ -214,9 +321,10 @@ public class RobotContainer {
         
         // return new PathPlannerAuto("SlowTestAuto");
         // return new PathPlannerAuto("RightAuto");
-        return new PathPlannerAuto("Straight Auto");
+        //return new PathPlannerAuto("Straight Auto");
         // return new PathPlannerAuto("shootTest");
         //return shooter.runTalonCmd();
+        return new PathPlannerAuto("BackingUp_Harv");
        
     }
-}
+}       

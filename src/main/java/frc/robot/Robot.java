@@ -7,7 +7,7 @@ package frc.robot;
 import com.ctre.phoenix6.HootAutoReplay;
 
 import edu.wpi.first.cameraserver.*;
-
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -22,9 +22,15 @@ public class Robot extends TimedRobot {
         .withTimestampReplay()
         .withJoystickReplay();
 
-    public Robot() {
+    
+    UsbCamera frontCam;
+    UsbCamera insideCam;
+    
+        public Robot() {
         m_robotContainer = new RobotContainer();
-        CameraServer.startAutomaticCapture();
+        frontCam= CameraServer.startAutomaticCapture(0);
+        insideCam= CameraServer.startAutomaticCapture(1);
+        frontCam.setFPS(20);
     }
 
     @Override

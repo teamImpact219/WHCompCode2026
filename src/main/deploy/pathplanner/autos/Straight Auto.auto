@@ -7,7 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Straight"
+            "pathName": null
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "runGroundHarvest"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
           }
         },
         {
@@ -19,13 +31,55 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 5.0
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "runTrigger"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "runAgitator"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 3.0
           }
         },
         {
           "type": "named",
           "data": {
             "name": "stopShooter"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopTrigger"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopAgitator"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopGroundHarvest"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": null
           }
         }
       ]

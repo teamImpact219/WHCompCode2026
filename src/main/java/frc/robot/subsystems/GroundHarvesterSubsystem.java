@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class GroundHarvesterSubsystem extends SubsystemBase {
   private final XboxController driveStick = new XboxController(0);
   private final TalonFX groundHarvest = new TalonFX(12);
-
+  
   
   
   public void runGroundHarvest (){
@@ -22,6 +22,9 @@ public class GroundHarvesterSubsystem extends SubsystemBase {
     return runOnce(() -> runGroundHarvest());
   };
 
+  public Command stopGroundHarvestCmd(){
+    return runOnce(() -> stopHarvest());
+  };
 
 
 

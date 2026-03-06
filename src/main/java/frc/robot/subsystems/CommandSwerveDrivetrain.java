@@ -12,6 +12,7 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.ctre.phoenix6.Utils;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -62,6 +63,22 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private final SwerveRequest.SysIdSwerveTranslation m_translationCharacterization = new SwerveRequest.SysIdSwerveTranslation();
     private final SwerveRequest.SysIdSwerveSteerGains m_steerCharacterization = new SwerveRequest.SysIdSwerveSteerGains();
     private final SwerveRequest.SysIdSwerveRotation m_rotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
+
+
+    //Current limits to prevent the motors from taking too much current and being brown
+private final CurrentLimitsConfigs driveMotorSettings = new CurrentLimitsConfigs()
+        .withStatorCurrentLimit(20)
+        .withStatorCurrentLimitEnable(true)
+        .withSupplyCurrentLimitEnable(true)
+        .withSupplyCurrentLimit(80);
+
+    private final CurrentLimitsConfigs steerMotorSettings = new CurrentLimitsConfigs()
+        .withStatorCurrentLimit(20)
+        .withStatorCurrentLimitEnable(true)
+        .withSupplyCurrentLimitEnable(true)
+        .withSupplyCurrentLimit(40);
+
+
 
     //encoders
     //private final Encoder m_
@@ -324,6 +341,12 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public void driveRobotRelative(ChassisSpeeds robotRelativeSpeeds) {
         chassisSpeedsSwerveRequests.withSpeeds(robotRelativeSpeeds);
         this.setControl(chassisSpeedsSwerveRequests);
+    }
+
+    private boolean fieldRelative = true;
+
+    public void toggleFieldRelative() {
+        fieldRelative = !fieldRelative;
     }
 
     public void configurePathPlanner() {

@@ -1,0 +1,209 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.537,
+        "y": 5.051
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.537,
+        "y": 5.051
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 0.466,
+        "y": 5.051
+      },
+      "prevControl": {
+        "x": 0.9852524250224479,
+        "y": 5.128383699993838
+      },
+      "nextControl": {
+        "x": 0.21873080314159699,
+        "y": 5.014149704410951
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 0.466,
+        "y": 6.874
+      },
+      "prevControl": {
+        "x": 0.39815046667199827,
+        "y": 5.876304434796284
+      },
+      "nextControl": {
+        "x": 0.4946109271556526,
+        "y": 7.294710264896995
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.542,
+        "y": 6.736
+      },
+      "prevControl": {
+        "x": 2.2878145695397585,
+        "y": 6.7066556291354065
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.0,
+      "rotationDegrees": 0.0
+    },
+    {
+      "waypointRelativePos": 2.0,
+      "rotationDegrees": 0.0
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 1.0,
+      "maxWaypointRelativePos": 2.0,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "LongShot",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "runAgitator"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "LongShot"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "Dropharvest"
+              }
+            },
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 8.0
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "runTrigger",
+      "waypointRelativePos": 0.34,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "runTrigger"
+        }
+      }
+    },
+    {
+      "name": "stopTrigger",
+      "waypointRelativePos": 0.74,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "race",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "stopTrigger"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "runGroundHarvest"
+              }
+            },
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 2.0
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "stopGroundHarvest",
+      "waypointRelativePos": 2.0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "stopGroundHarvest"
+        }
+      }
+    },
+    {
+      "name": "runTrigger",
+      "waypointRelativePos": 2.54,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "runTrigger"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -51.15601371786137
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}

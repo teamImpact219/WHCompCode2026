@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -13,13 +14,24 @@ public class ShooterSubsytem extends SubsystemBase {
   private final TalonFX shooter  = new TalonFX(10);
    //private final CommandXboxController shootStick = new CommandXboxController(1);
 
+   private final CurrentLimitsConfigs shooterMotorSettings = new CurrentLimitsConfigs()
+        .withSupplyCurrentLimitEnable(true)        
+        .withSupplyCurrentLimit(80);
+   
    public void runShooter(){
+    shooter.set(-1);
+   }
+
+   public void runCloseShooter(){
     shooter.set(-0.83);
    }
 
-   public void runLongShot(){
-    shooter.set(-0.1);
-   }
+
+
+
+   //about 9ft 5 inch for 0.83 right on the money
+
+
 
    public void stopShooter(){
     shooter.set(0);

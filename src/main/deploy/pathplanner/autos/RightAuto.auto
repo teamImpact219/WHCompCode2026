@@ -49,13 +49,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "RightStartToHuman"
+            "pathName": null
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "HumanToLongShotSpot"
+            "pathName": null
           }
         },
         {
@@ -91,7 +91,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "GoMidFromShotR"
+            "pathName": null
           }
         }
       ]

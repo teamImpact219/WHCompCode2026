@@ -17,7 +17,7 @@ public class TriggerSubsystem extends SubsystemBase {
 
 
    public void runTrigger(){
-   agitator.set(0.2);
+   agitator.set(0.65);
     trigger.set(-1);
    }
 
@@ -42,7 +42,30 @@ public class TriggerSubsystem extends SubsystemBase {
     public Command runTriggerCmd(){
     return runOnce(() -> trigger.set(-1));
     
+
    }
+
+   public Command stopAgitatorCmd2(){
+    return runOnce(() -> agitator.set(0));
+   }
+    public Command runAgitatorCmd2(){
+    return runOnce(() -> agitator.set(.65));
+    
+
+   }
+    public void runAgitatorCmd(){
+    
+     agitator.set(0.65);
+
+   }
+
+   public void stopAgitatorCmd(){
+    
+     agitator.set(0);
+
+   }
+
+
 
 
   /** Creates a new ShooterSubsytem. */

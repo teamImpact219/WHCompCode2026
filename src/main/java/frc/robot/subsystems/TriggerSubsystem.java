@@ -13,12 +13,19 @@ public class TriggerSubsystem extends SubsystemBase {
    private final SparkMax trigger  = new SparkMax(15, MotorType.kBrushless);
    private final SparkMax agitator  = new SparkMax(18, MotorType.kBrushless); 
 
+   private double isTriggerOn = 0;
+   private double isAgitatorOn=0;
+   
+
 
 
 
    public void runTrigger(){
+    
    agitator.set(0.65);
     trigger.set(-1);
+    isTriggerOn = 1.0;
+    isAgitatorOn=.65;
    }
 
    public void debugAgitator(){
@@ -32,6 +39,8 @@ public class TriggerSubsystem extends SubsystemBase {
    public void stopTrigger(){
     trigger.set(0);
    agitator.set(0);
+   isTriggerOn = 0;
+   isAgitatorOn=0;
    }
 
 
@@ -56,15 +65,28 @@ public class TriggerSubsystem extends SubsystemBase {
     public void runAgitatorCmd(){
     
      agitator.set(0.65);
+     isAgitatorOn=.65;
 
    }
 
    public void stopAgitatorCmd(){
     
      agitator.set(0);
+     isAgitatorOn=0;
 
    }
 
+   public double getIsTriggerOn(){
+    return isTriggerOn;
+   }
+
+   public double getIsAgitatorOn(){
+    return isAgitatorOn;
+   }
+
+  //  public void setIsAgitatorOn(double num){
+  //   isAgitatorOn =num;
+  //  }
 
 
 

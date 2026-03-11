@@ -7,15 +7,20 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class GroundHarvesterSubsystem extends SubsystemBase {
   private final XboxController driveStick = new XboxController(0);
   private final TalonFX groundHarvest = new TalonFX(12);
-  
+  // private final TriggerSubsystem trigger = new TriggerSubsystem();
+  // private double isAgitatorOn;
+  public double isGroundHarvOn = 0;
+
   
   
   public void runGroundHarvest (){
     groundHarvest.set(-0.3);
+    isGroundHarvOn = .3;
   }
 
   public void stopHarvest(){
     groundHarvest.set(0);
+    isGroundHarvOn = 0;
   }
 
   public Command runGroundHarvestCmd(){
@@ -25,6 +30,10 @@ public class GroundHarvesterSubsystem extends SubsystemBase {
   public Command stopGroundHarvestCmd(){
     return runOnce(() -> stopHarvest());
   };
+
+  public double getIsGroundHarvOn(){
+    return isGroundHarvOn;
+  }
 
 
 

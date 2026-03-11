@@ -9,27 +9,27 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "BackToWall_Harv"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "Dropharvest"
                 }
               },
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "LongShot"
+                  "pathName": "rightPlayer p1"
                 }
               },
               {
                 "type": "named",
                 "data": {
                   "name": "runAgitator"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 1.0
                 }
               }
             ]
@@ -38,25 +38,19 @@
         {
           "type": "named",
           "data": {
-            "name": "runHarv"
+            "name": "LongShot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "UpWall_Harv"
+            "pathName": "rightPlayer p2"
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "stopHarv"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "ToShoot_Harv"
+            "waitTime": 0.25
           }
         },
         {
@@ -68,19 +62,13 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 4.0
+            "waitTime": 2.0
           }
         },
         {
           "type": "named",
           "data": {
             "name": "RaiseHarvest"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 3.5
           }
         },
         {
@@ -92,7 +80,7 @@
         {
           "type": "named",
           "data": {
-            "name": "stopAgitator"
+            "name": "stopTrigger"
           }
         },
         {
@@ -104,7 +92,7 @@
         {
           "type": "named",
           "data": {
-            "name": "stopTrigger"
+            "name": "stopAgitator"
           }
         }
       ]

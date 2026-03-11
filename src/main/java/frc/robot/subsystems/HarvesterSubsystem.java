@@ -18,6 +18,7 @@ public class HarvesterSubsystem extends SubsystemBase {
   private final SparkMax runDropHarvester  = new SparkMax(16, MotorType.kBrushless);
   //private final SparkMax dropHarvest = new SparkMax(17, MotorType.kBrushless);
   private final TalonFX dropHarvest  = new TalonFX(17);
+  private double isHarvOn =0;
    //negative in up
   //positive is down
 
@@ -39,26 +40,21 @@ public class HarvesterSubsystem extends SubsystemBase {
 
   public void runDropHarvest(){
     runDropHarvester.set(1);
+    isHarvOn = 1;
   }
   
   public void stopDropHarvest(){
     runDropHarvester.set(0);
+    isHarvOn = 0;
   }
 
 
-  public void raiseDropHarvestDebug(){
-    dropHarvest.set(.12);
-   // System.out.println(topSwitch.get());
-  }
 
    public void stopMoving(){
     dropHarvest.set(0);
   }
 
-  public void lowerDropHarvestDebug(){
-    //System.out.println(botSwitch.get());
-    //dropHarvest.set(-.12);
-  }
+
 
 
 
@@ -91,8 +87,8 @@ public class HarvesterSubsystem extends SubsystemBase {
         dropHarvest.set(0);
 
       }
-      while(topSwitch.get() && (System.currentTimeMillis()- startTime) < 2000){
-        dropHarvest.set(.15);
+      while(topSwitch.get() && (System.currentTimeMillis()- startTime) < 2400){
+        dropHarvest.set(-.15);
         
       }
       dropHarvest.set(0);
@@ -109,12 +105,16 @@ public class HarvesterSubsystem extends SubsystemBase {
         dropHarvest.set(0);
 
       }
-      while(botSwitch.get() && (System.currentTimeMillis()- startTime) < 2000){
-        dropHarvest.set(-.15);
+      while(botSwitch.get() && (System.currentTimeMillis()- startTime) < 2500){
+        dropHarvest.set(.15);
         
       }
       dropHarvest.set(0);
 
+  }
+
+  public double getIsHarvOn(){
+    return isHarvOn;
   }
 
 

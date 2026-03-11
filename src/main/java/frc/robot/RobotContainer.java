@@ -30,41 +30,38 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.GroundHarvesterSubsystem;
 import frc.robot.subsystems.HarvesterSubsystem;
 import frc.robot.subsystems.ShooterSubsytem;
-import frc.robot.subsystems.SpeedSubsystem;
+
 import frc.robot.subsystems.TriggerSubsystem;
 
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 
 
 
 public class RobotContainer extends SubsystemBase{
-        private final SpeedSubsystem SPEED = new SpeedSubsystem();
 
         //private double slowSpeed=.25;
-       // private double speed=SPEED.getSpeed();
 
-
-
-
-
-    private double MaxSpeed = .5 * TunerConstants3.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top
+   public final CommandSwerveDrivetrain drivetrain = TunerConstants3.createDrivetrain();
+    private double MaxSpeed = drivetrain.multi * TunerConstants3.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top
                                                                                        // speed
-    private double MaxAngularRate = RotationsPerSecond.of(0.50).in(RadiansPerSecond); //was .75 now .5 2-28-26        3/4 of a rotation per second
+    private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); //was .75 now .5 2-28-26        3/4 of a rotation per second
                                                                                       // max angular velocity
     // not swerev variables
-    // private final CommandXboxController driveStick= new CommandXboxController(1);
+
     private final CommandXboxController codriverController = new CommandXboxController(1);
 
-    private final ShooterSubsytem shooter = new ShooterSubsytem();
-    private final TriggerSubsystem trigger = new TriggerSubsystem();
+    public final ShooterSubsytem shooter = new ShooterSubsytem();
+    public final TriggerSubsystem trigger = new TriggerSubsystem();
 
-    private final HarvesterSubsystem harv = new HarvesterSubsystem();
+    public final HarvesterSubsystem harv = new HarvesterSubsystem();
     //private final HarvesterCommand harvest = new HarvesterCommand(harv);
 
-    private final GroundHarvesterSubsystem groundHarv = new GroundHarvesterSubsystem();
+    public final GroundHarvesterSubsystem groundHarv = new GroundHarvesterSubsystem();
     // private final GroundHarvesterCommand groundHarvest = new
     // GroundHarvesterCommand(groundHarv);
 
@@ -81,7 +78,7 @@ public class RobotContainer extends SubsystemBase{
 
     private final CommandXboxController driverController = new CommandXboxController(0);
 
-    public final CommandSwerveDrivetrain drivetrain = TunerConstants3.createDrivetrain();
+ 
 
 
     //private final SendableChooser<Command> autoChooser;
@@ -127,17 +124,27 @@ public class RobotContainer extends SubsystemBase{
         drivetrain.configurePathPlanner();
         
         configureBindings();
+
+
+        //widgets for smartDashboard 
+        // SmartDashboard.putNumber("ShooterSpeed", shooter.getShooterRPM());
+        // SmartDashboard.putNumber("TriggerSpeed", trigger.getIsTriggerOn());
+        // SmartDashboard.putNumber("AgitatorSpeed", trigger.getIsAgitatorOn());
+        // SmartDashboard.putNumber("GroundHarvSpeed", groundHarv.getIsGroundHarvOn());
+        // SmartDashboard.putNumber("DropDownHarvSpeed", harv.getIsHarvOn());
     }
 
     private void configureBindings() {
         // buttons we made
         bindJoystickX();
         bindJoysticky();
+        
         bindJoystickA();
         bindJoystickb();
-        //bindLeftTrigger();
-        //bindRightTrigger();
-        //bindLeftDPad();
+        bindRightBumper();
+        bindLeftDPad();
+        bindRightDPad();
+        //bindUpDPad();
 
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
@@ -185,17 +192,23 @@ public class RobotContainer extends SubsystemBase{
 
     // START OF THE BUTTON PRESSES
 
-//     private void bindLeftTrigger(){
-//         driverController.leftBumper().onTrue(              
-//                        SPEED.fastCmd()
-//         );
-//     }
+        private void bindLeftDPad() {
+        driverController.povLeft()
+    .toggleOnTrue(drivetrain.runOnce( () -> drivetrain.setSpeedMultiplier(0.5)));
+        }
 
-//     private void bindRightTrigger(){
-//         driverController.rightBumper().onTrue(              
-//                        SPEED.slowCmd()
-//         );
-//     }
+        private void bindRightDPad() {
+        driverController.povRight()
+    .toggleOnTrue(drivetrain.runOnce( () -> drivetrain.setSpeedMultiplier(1.0)));
+        }
+
+
+//          private void bindRightDPad() {
+//         driverController.povRight()
+//     .toggleOnTrue(drivetrain.runOnce( () -> drivetrain.setSpeedMultiplier(1.0)));
+
+//     System.out.println("fast");
+//         }
 
     private void bindJoystickA() {
 
@@ -226,11 +239,6 @@ public class RobotContainer extends SubsystemBase{
         () -> harv.raiseDropHarvest(),
         () -> harv.stopMoving())));
 
-        //runs the trigger (bottom row of wheels on the shooter)
-        // driverController.y().onTrue(
-        //         harv.runOnce(
-        //              ()->  harv.raiseDropHarvest() // End action
-        //  ));
     }
 
     private void bindJoystickX() {
@@ -238,13 +246,13 @@ public class RobotContainer extends SubsystemBase{
         // shoots the shooter
         codriverController.x().toggleOnTrue(
                 shooter.startEnd(
-                        () -> shooter.runShooter(), // Start action
+                        () -> shooter.runCloseShooter(), // Start action
                         () -> shooter.stopShooter() // End action
                 ));
 
         // runs the drop down harvester
         driverController.x().toggleOnTrue(
-                harv.startEnd(
+                groundHarv.startEnd(
                         () -> groundHarv.runGroundHarvest(), // Start action
                         () -> groundHarv.stopHarvest() // End action
                 ));
@@ -262,46 +270,32 @@ public class RobotContainer extends SubsystemBase{
      private void bindJoystickb() {
 
 
-        // driverController.b().toggleOnTrue((harv.startEnd(
-        // () -> harv.lowerDropHarvestDebug(),
-        // () -> harv.stopMoving())));
+        codriverController.b().toggleOnTrue((harv.startEnd(
+        () -> harv.lowerDropHarvest(),
+        () -> harv.stopMoving())));
 
-        // codriverController.b().toggleOnTrue((trigger.startEnd(
-        // () -> trigger.debugAgitator(),
-        // () -> trigger.stopDebugAgitator())));
        
-        codriverController.b().onTrue(
-                harv.runOnce(
-                     ()->  harv.lowerDropHarvest() // End action
-         ) );
 
     }
 
 
 
-    public void bindLeftDPad(){
-       driverController.povLeft().onTrue(Commands.runOnce( () -> drivetrain.toggleFieldRelative()));    
+//          public void bindLeftDPad(){
+//        driverController.povLeft().onTrue(Commands.runOnce( () -> drivetrain.toggleFieldRelative()));    
+//         }
+
+
+        public void bindRightBumper(){
+                codriverController.rightBumper().toggleOnTrue(shooter.startEnd( ()->
+                shooter.runShooter(),
+                () -> shooter.stopShooter()));
+
         }
 
 
-        public void bindRightBumber(){
-                codriverController.rightBumper().onTrue(Commands.runOnce(()->
-                shooter.runShooter()));
-        }
-
-       
-        // public void setFastSpeed(){
-        //         speed=.5;
-        // }
-       
-
-
-        //  public command fastCmd(){
-        //       return  runOnce(() -> setFastSpeed());
-        // }
         
 
-    public Command getAutonomousCommand() {
+  public Command getAutonomousCommand() {
         // // Simple drive forward auton
         // final var idle = new SwerveRequest.Idle();
         // return Commands.sequence(
@@ -324,7 +318,8 @@ public class RobotContainer extends SubsystemBase{
         //return new PathPlannerAuto("Straight Auto");
         // return new PathPlannerAuto("shootTest");
         //return shooter.runTalonCmd();
-        return new PathPlannerAuto("BackingUp_Harv");
+        return new PathPlannerAuto("rightPlayer");
        
     }
+
 }       

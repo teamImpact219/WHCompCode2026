@@ -5,70 +5,9 @@
     "data": {
       "commands": [
         {
-          "type": "sequential",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "BackToWall"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "LongShot"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Dropharvest"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "runAgitator"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "runGroundHarvest"
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "UpWall"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "stopGroundHarvest"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "ToShootLoc"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "runTrigger"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 3.0
+            "pathName": "leave"
           }
         },
         {
@@ -80,13 +19,25 @@
         {
           "type": "named",
           "data": {
+            "name": "stopAgitator"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "stopTrigger"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "stopAgitator"
+            "name": "runHarv"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "clear-mid"
           }
         }
       ]

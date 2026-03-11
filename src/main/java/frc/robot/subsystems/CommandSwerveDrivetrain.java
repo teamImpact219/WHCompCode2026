@@ -294,7 +294,8 @@ private final CurrentLimitsConfigs driveMotorSettings = new CurrentLimitsConfigs
     }
 
     /**
-     * Adds a vision measurement to the Kalman Filter. This will correct the odometry pose estimate
+     * Adds a vision measurement to the Kal
+     * n Filter. This will correct the odometry pose estimate
      * while still accounting for measurement noise.
      *
      * @param visionRobotPoseMeters The pose of the robot as measured by the vision camera.
@@ -388,5 +389,11 @@ private final CurrentLimitsConfigs driveMotorSettings = new CurrentLimitsConfigs
             DriverStation.reportError("Failed to load PathPlanner config", e.getStackTrace());
         }
     }
+
+    public double multi = 0.75;
+    public void setSpeedMultiplier(double value) {
+    multi = value;
+}
+
 
 }

@@ -9,13 +9,26 @@ import com.ctre.phoenix6.HootAutoReplay;
 import edu.wpi.first.cameraserver.*;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.GroundHarvesterSubsystem;
+import frc.robot.subsystems.HarvesterSubsystem;
+import frc.robot.subsystems.ShooterSubsytem;
+import frc.robot.subsystems.TriggerSubsystem;
 
 public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
 
     private final RobotContainer m_robotContainer;
+
+      private final ShooterSubsytem shooter = new ShooterSubsytem();
+   // private final TriggerSubsystem trigger = new TriggerSubsystem();
+
+    //private final HarvesterSubsystem harv = new HarvesterSubsystem();
+    //private final HarvesterCommand harvest = new HarvesterCommand(harv);
+
+    private final GroundHarvesterSubsystem groundHarv = new GroundHarvesterSubsystem();
 
     /* log and replay timestamp and joystick data */
     private final HootAutoReplay m_timeAndJoystickReplay = new HootAutoReplay()
@@ -31,20 +44,34 @@ public class Robot extends TimedRobot {
         frontCam= CameraServer.startAutomaticCapture(0);
         insideCam= CameraServer.startAutomaticCapture(1);
         frontCam.setFPS(20);
+
+        
     }
 
     @Override
     public void robotPeriodic() {
         m_timeAndJoystickReplay.update();
         CommandScheduler.getInstance().run(); 
+
+        SmartDashboard.putNumber("ShooterSpeed", shooter.getShooterRPM());
+        SmartDashboard.putNumber("TriggerSpeed", m_robotContainer.trigger.getIsTriggerOn());
+        SmartDashboard.putNumber("AgitatorSpeed", m_robotContainer.trigger.getIsAgitatorOn());
+        SmartDashboard.putNumber("GroundHarvSpeed", groundHarv.getIsGroundHarvOn());
+        SmartDashboard.putNumber("DropDownHarvSpeed", m_robotContainer.harv.getIsHarvOn());
+    }
+    // after Auton when switching to teleop this will turn of things we specify such as the shooter ir the inexer 
+    @Override
+    public void disabledInit() {
+        shooter.stopShooter();
+        m_robotContainer.harv.stopDropHarvest();
+        m_robotContainer.trigger.stopTrigger();
+        m_robotContainer.trigger.stopAgitatorCmd();
+
     }
 
     @Override
-    public void disabledInit() {}
-
-    @Override
     public void disabledPeriodic() {}
-
+    //this can reboot setting when the robot leaves Auton (sensors) or at start match
     @Override
     public void disabledExit() {}
 

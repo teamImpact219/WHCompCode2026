@@ -11,6 +11,7 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -25,6 +26,8 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 //import com.pathplanner.lib.commands.FollowPathCommand;
 import com.pathplanner.lib.commands.*;
 
+import frc.robot.commands.uniCamSuggestVisionEstimationCommand;
+import frc.robot.commands.uniCamTurnToTagCommand;
 import frc.robot.generated.TunerConstants3;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.GroundHarvesterSubsystem;
@@ -32,7 +35,7 @@ import frc.robot.subsystems.HarvesterSubsystem;
 import frc.robot.subsystems.ShooterSubsytem;
 
 import frc.robot.subsystems.TriggerSubsystem;
-
+import frc.robot.subsystems.UniCamVisionSubsystem;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -77,8 +80,14 @@ public class RobotContainer extends SubsystemBase{
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
     private final CommandXboxController driverController = new CommandXboxController(0);
+    //VISION STUFF
+    //update the cameras position
+    //trun to (button b) goes wtih co driver controller 
+    public final UniCamVisionSubsystem vision = new UniCamVisionSubsystem("ACER_HD_User_Facing", new Transform3d());
+    public final uniCamTurnToTagCommand turnToCommand = new uniCamTurnToTagCommand(0, vision, drivetrain, drive);
+    public final uniCamSuggestVisionEstimationCommand visionEstimation = new uniCamSuggestVisionEstimationCommand(drivetrain, vision);
 
- 
+
 
 
     //private final SendableChooser<Command> autoChooser;
@@ -135,6 +144,10 @@ public class RobotContainer extends SubsystemBase{
     }
 
     private void configureBindings() {
+        //vision stuff
+                //constantly contributes position estimations from vision subsystem
+                vision.setDefaultCommand(visionEstimation);
+                bindVisionController();
         // buttons we made
         bindJoystickX();
         bindJoysticky();
@@ -209,6 +222,11 @@ public class RobotContainer extends SubsystemBase{
 
 //     System.out.println("fast");
 //         }
+    private void bindVisionController(){
+        driverController.b().onTrue(turnToCommand);
+
+
+    }
 
     private void bindJoystickA() {
 

@@ -46,8 +46,8 @@ public class RobotContainer extends SubsystemBase{
 
         //private double slowSpeed=.25;
 
-   public final CommandSwerveDrivetrain drivetrain = TunerConstants3.createDrivetrain();
-    private double MaxSpeed = drivetrain.multi * TunerConstants3.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top
+    public final CommandSwerveDrivetrain drivetrain = TunerConstants3.createDrivetrain();
+    private double MaxSpeed = .5;  
                                                                                        // speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); //was .75 now .5 2-28-26        3/4 of a rotation per second
                                                                                       // max angular velocity
@@ -142,8 +142,8 @@ public class RobotContainer extends SubsystemBase{
         bindJoystickA();
         bindJoystickb();
         bindRightBumper();
-        bindLeftDPad();
-        bindRightDPad();
+        // bindLeftDPad();
+        // bindRightDPad();
         //bindUpDPad();
 
         // Note that X is defined as forward according to WPILib convention,
@@ -192,15 +192,15 @@ public class RobotContainer extends SubsystemBase{
 
     // START OF THE BUTTON PRESSES
 
-        private void bindLeftDPad() {
-        driverController.povLeft()
-    .toggleOnTrue(drivetrain.runOnce( () -> drivetrain.setSpeedMultiplier(0.5)));
-        }
+//         private void bindLeftDPad() {
+//         driverController.povLeft()
+//     .toggleOnTrue(drivetrain.runOnce( () -> drivetrain.setSpeedMultiplier(0.5)));
+//         }
 
-        private void bindRightDPad() {
-        driverController.povRight()
-    .toggleOnTrue(drivetrain.runOnce( () -> drivetrain.setSpeedMultiplier(1.0)));
-        }
+//         private void bindRightDPad() {
+//         driverController.povRight()
+//     .toggleOnTrue(drivetrain.runOnce( () -> drivetrain.setSpeedMultiplier(1.0)));
+//         }
 
 
 //          private void bindRightDPad() {

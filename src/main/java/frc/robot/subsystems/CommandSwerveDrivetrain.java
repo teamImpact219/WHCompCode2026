@@ -47,6 +47,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
 
+   
+
+
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
     private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
     /* Red alliance sees forward as 180 degrees (toward blue alliance wall) */
@@ -293,6 +296,12 @@ private final CurrentLimitsConfigs driveMotorSettings = new CurrentLimitsConfigs
         m_simNotifier.startPeriodic(kSimLoopPeriod);
     }
 
+
+    //HEHE SILLY CODE THIS IS FOR FUNSIES JESS SAID TO DELETE BUT I NO WANT TO 
+    // public static double  getVoltage(){
+    //     return RobotController.getBatteryVoltage();
+    // }
+
     /**
      * Adds a vision measurement to the Kal
      * n Filter. This will correct the odometry pose estimate
@@ -390,10 +399,7 @@ private final CurrentLimitsConfigs driveMotorSettings = new CurrentLimitsConfigs
         }
     }
 
-    public double multi = 0.75;
-    public void setSpeedMultiplier(double value) {
-    multi = value;
-}
+    
 
 
 }

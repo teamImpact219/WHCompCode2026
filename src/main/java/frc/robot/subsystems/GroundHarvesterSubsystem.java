@@ -1,18 +1,20 @@
 package frc.robot.subsystems;
 import com.ctre.phoenix6.hardware.TalonFX;
-import edu.wpi.first.wpilibj.XboxController;
+//import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class GroundHarvesterSubsystem extends SubsystemBase {
-  private final XboxController driveStick = new XboxController(0);
+  //private final XboxController driveStick = new XboxController(0);
   private final TalonFX groundHarvest = new TalonFX(12);
   // private final TriggerSubsystem trigger = new TriggerSubsystem();
   // private double isAgitatorOn;
   public double isGroundHarvOn = 0;
 
   
-  
+  public double getGroundHarvRPM() {
+    return groundHarvest.getVelocity().getValueAsDouble()*60;
+   }
   public void runGroundHarvest (){
     groundHarvest.set(-0.3);
     isGroundHarvOn = .3;

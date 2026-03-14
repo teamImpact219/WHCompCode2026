@@ -48,6 +48,10 @@ public class HarvesterSubsystem extends SubsystemBase {
     isHarvOn = 0;
   }
 
+  public double getDropHarvRPM() {
+    return runDropHarvester.getEncoder().getVelocity();
+   }
+
 
 
    public void stopMoving(){

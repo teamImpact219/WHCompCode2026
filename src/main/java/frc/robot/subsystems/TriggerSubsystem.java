@@ -43,6 +43,16 @@ public class TriggerSubsystem extends SubsystemBase {
    isAgitatorOn=0;
    }
 
+   public double getTriggerRPM() {
+    return trigger.getEncoder().getVelocity();
+   }
+
+   public double getAgitatorRPM() {
+    return agitator.getEncoder().getVelocity();
+   }
+
+   
+
 
    //these commands dont work for some reason
    public Command stopTriggerCmd(){

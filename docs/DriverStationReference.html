@@ -147,6 +147,7 @@
     }
     .tag-toggle  { background: #ede7f6; color: #512da8; }
     .tag-instant { background: #e3f2fd; color: #1565c0; }
+    .tag-hold    { background: #fff3e0; color: #e65100; }
 
     /* FOOTER */
     .page-footer {
@@ -254,6 +255,17 @@
         <text x="688" y="227" text-anchor="middle" fill="white" font-size="12" font-family="Arial" font-weight="bold">X &#8212; GROUND HARV</text>
         <text x="688" y="241" text-anchor="middle" fill="#90caf9" font-size="10" font-family="Arial">+ Agitator (toggle)</text>
 
+        <!-- Y BUTTON highlight (face hub) -->
+        <circle cx="576" cy="208" r="26"
+                fill="#e65100" fill-opacity="0.45"
+                stroke="#ffcc02" stroke-width="4" stroke-opacity="0.95"/>
+        <!-- Y callout line going right -->
+        <line x1="602" y1="208" x2="636" y2="195" stroke="#ffcc02" stroke-width="2" stroke-dasharray="4,3"/>
+        <rect x="636" y="176" width="105" height="38" rx="5"
+              fill="#bf360c" fill-opacity="0.92"/>
+        <text x="688" y="191" text-anchor="middle" fill="white" font-size="12" font-family="Arial" font-weight="bold">Y &#8212; FACE HUB</text>
+        <text x="688" y="205" text-anchor="middle" fill="#ffcc80" font-size="10" font-family="Arial">Auto-aim (hold)</text>
+
         <!-- Drive speed note box (top-left corner, above LB area) -->
         <rect x="4" y="4" width="142" height="30" rx="5"
               fill="#f9a825" fill-opacity="0.9"/>
@@ -310,6 +322,15 @@
           <div class="det">Runs ground intake roller and agitator simultaneously &nbsp;&nbsp;Press again to stop</div>
         </div>
         <span class="tag tag-toggle">TOGGLE</span>
+      </div>
+
+      <div class="binding bl-y">
+        <div class="bb bb-round bg-y">Y</div>
+        <div class="desc">
+          <div class="act">Face Hub</div>
+          <div class="det">Rotates robot to aim at scoring hub using vision &nbsp;&nbsp;Release to resume manual rotation</div>
+        </div>
+        <span class="tag tag-hold">HOLD</span>
       </div>
     </div>
   </div>

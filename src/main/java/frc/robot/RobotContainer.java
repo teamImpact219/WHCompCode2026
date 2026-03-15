@@ -25,13 +25,14 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 //import com.pathplanner.lib.commands.FollowPathCommand;
 import com.pathplanner.lib.commands.*;
 
+import frc.robot.commands.FaceHubCommand;
 import frc.robot.generated.TunerConstants3;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.GroundHarvesterSubsystem;
 import frc.robot.subsystems.HarvesterSubsystem;
 import frc.robot.subsystems.ShooterSubsytem;
-
 import frc.robot.subsystems.TriggerSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
@@ -47,6 +48,7 @@ public class RobotContainer extends SubsystemBase{
         //private double slowSpeed=.25;
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants3.createDrivetrain();
+    public final VisionSubsystem vision = new VisionSubsystem(drivetrain);
     private double MaxSpeed = .5;  
                                                                                        // speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); //was .75 now .5 2-28-26        3/4 of a rotation per second
@@ -182,6 +184,11 @@ public class RobotContainer extends SubsystemBase{
 
         // Reset the field-centric heading on left bumper press.
         driverController.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
+
+        // Hold Y to continuously rotate the robot to face the scoring hub.
+        // The driver can still translate freely while holding Y.
+        driverController.y().whileTrue(
+            new FaceHubCommand(drivetrain, vision, driverController, MaxSpeed, MaxAngularRate));
 
 
 

@@ -29,8 +29,7 @@ public class VisionSubsystem extends SubsystemBase {
     // TODO (BEFORE DEPLOYMENT): Verify these names match exactly what you named
     // each camera in the PhotonVision web UI on the Orange Pi.
     // Open a browser to http://photonvision.local:5800 and check the camera names.
-    public static final String FRONT_CAMERA_NAME = "front_camera";
-    public static final String SIDE_CAMERA_NAME  = "side_camera";
+    public static final String FRONT_CAMERA_NAME = "front-cam";
 
     // Hub AprilTag IDs for each alliance (2026 REBUILT game)
     public static final int[] RED_HUB_TAG_IDS  = {9, 10};
@@ -55,16 +54,6 @@ public class VisionSubsystem extends SubsystemBase {
         new Rotation3d(0, 0, 0)
     );
 
-    // TODO (BEFORE DEPLOYMENT): Measure ROBOT_TO_SIDE_CAMERA from your robot's
-    // CAD or physical build and replace the placeholder values below.
-    //   - The side camera faces 90° to the left of robot forward (yaw = +90°).
-    //   - Adjust the Translation3d to match where the camera is actually mounted.
-    // Current placeholder: centered fore/aft, 25 cm left of center, 50 cm up, facing left.
-    public static final Transform3d ROBOT_TO_SIDE_CAMERA = new Transform3d(
-        new Translation3d(0.0, 0.25, 0.50),
-        new Rotation3d(0, 0, Math.toRadians(90))
-    );
-
     // -----------------------------------------------------------------------
     // Vision pose measurement standard deviations [x, y, theta].
     // Lower values = trust vision more. Increase if measurements are noisy.
@@ -77,44 +66,33 @@ public class VisionSubsystem extends SubsystemBase {
     // -----------------------------------------------------------------------
     private final CommandSwerveDrivetrain drivetrain;
     private final PhotonCamera frontCamera;
-    private final PhotonCamera sideCamera;
     private final AprilTagFieldLayout fieldLayout;
     private final PhotonPoseEstimator frontEstimator;
-    private final PhotonPoseEstimator sideEstimator;
 
     public VisionSubsystem(CommandSwerveDrivetrain drivetrain) {
         this.drivetrain = drivetrain;
 
         frontCamera = new PhotonCamera(FRONT_CAMERA_NAME);
-        sideCamera  = new PhotonCamera(SIDE_CAMERA_NAME);
 
         fieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
 
         frontEstimator = new PhotonPoseEstimator(fieldLayout, ROBOT_TO_FRONT_CAMERA);
-        sideEstimator  = new PhotonPoseEstimator(fieldLayout, ROBOT_TO_SIDE_CAMERA);
     }
 
     @Override
     public void periodic() {
         updatePoseEstimates(frontCamera, frontEstimator);
-        updatePoseEstimates(sideCamera, sideEstimator);
     }
 
     /**
-     * Returns the best visible hub AprilTag target for the current alliance,
-     * preferring the front camera over the side camera.
+     * Returns the best visible hub AprilTag target for the current alliance from the front camera.
      * "Best" means the target with the lowest pose ambiguity among hub tags.
      */
     public Optional<PhotonTrackedTarget> getBestHubTarget() {
-        int[] hubIds = getAllianceHubTagIds();
-
-        Optional<PhotonTrackedTarget> frontTarget = getBestTargetFromCamera(frontCamera, hubIds);
-        if (frontTarget.isPresent()) return frontTarget;
-
-        return getBestTargetFromCamera(sideCamera, hubIds);
+        return getBestTargetFromCamera(frontCamera, getAllianceHubTagIds());
     }
 
-    /** Returns true if any hub AprilTag is currently visible on either camera. */
+    /** Returns true if any hub AprilTag is currently visible on the front camera. */
     public boolean isHubVisible() {
         return getBestHubTarget().isPresent();
     }

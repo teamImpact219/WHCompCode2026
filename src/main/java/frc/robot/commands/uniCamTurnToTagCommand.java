@@ -59,7 +59,7 @@ public class uniCamTurnToTagCommand extends Command {
           break;
         }
       }
-      drivetrain.setControl(driveCommand.withRotationalRate(-2.5*targetYaw)); 
+      drivetrain.setControl(driveCommand.withRotationalRate(-0.5*targetYaw)); 
       //drivetrain.setControl(driveCommand.withRotationalRate(-1));
     }
 

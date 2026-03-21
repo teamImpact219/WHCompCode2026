@@ -226,18 +226,15 @@ public class RobotContainer extends SubsystemBase{
                         () -> trigger.stopTrigger() // End action
                 ));
 
-        // toggle ground harvest on and off with the press of a button
+        // toggle ground harvest and agitator together on and off with the press of a button
         driverController.a().toggleOnTrue(
-
-                harv.startEnd(
-                        () -> harv.runDropHarvest(),
-                        () -> harv.stopDropHarvest()));
-
-        driverController.a().toggleOnTrue(
-                trigger.startEnd(
-                        () -> trigger.runAgitatorCmd(), // Start action
-                        () -> trigger.stopAgitatorCmd() // End action
-                ));
+                Commands.parallel(
+                        harv.startEnd(
+                                () -> harv.runDropHarvest(),
+                                () -> harv.stopDropHarvest()),
+                        trigger.startEnd(
+                                () -> trigger.runAgitatorCmd(),
+                                () -> trigger.stopAgitatorCmd())));
     }
 
      private void bindJoysticky() {
@@ -257,19 +254,15 @@ public class RobotContainer extends SubsystemBase{
                         () -> shooter.stopShooter() // End action
                 ));
 
-        // runs the drop down harvester
+        // runs the drop down harvester and agitator together
         driverController.x().toggleOnTrue(
-                groundHarv.startEnd(
-                        () -> groundHarv.runGroundHarvest(), // Start action
-                        () -> groundHarv.stopHarvest() // End action
-                ));
-
-
-        driverController.x().toggleOnTrue(
-                trigger.startEnd(
-                        () -> trigger.runAgitatorCmd(), // Start action
-                        () -> trigger.stopAgitatorCmd() // End action
-                ));
+                Commands.parallel(
+                        groundHarv.startEnd(
+                                () -> groundHarv.runGroundHarvest(),
+                                () -> groundHarv.stopHarvest()),
+                        trigger.startEnd(
+                                () -> trigger.runAgitatorCmd(),
+                                () -> trigger.stopAgitatorCmd())));
     }
 
 

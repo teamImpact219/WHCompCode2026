@@ -22,7 +22,6 @@ public class uniCamSuggestVisionEstimationCommand extends Command {
 
   public uniCamSuggestVisionEstimationCommand(CommandSwerveDrivetrain drivetrain, UniCamVisionSubsystem vision) {
     //reqs
-    addRequirements(drivetrain);
     addRequirements(vision);
     //assignment
     this.drivetrain = drivetrain;

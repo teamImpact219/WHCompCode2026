@@ -223,7 +223,7 @@ public class RobotContainer extends SubsystemBase{
 //     System.out.println("fast");
 //         }
     private void bindVisionController(){
-        driverController.b().onTrue(turnToCommand);
+        driverController.b().whileTrue(turnToCommand);
 
 
     }

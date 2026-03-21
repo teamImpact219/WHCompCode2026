@@ -25,9 +25,7 @@ public class UniCamVisionSubsystem extends SubsystemBase {
     //field/pose estimation variables
     public static final AprilTagFieldLayout apriltagPositions = 
       AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
-    public final PhotonPoseEstimator poseEstimatorInator =
-      new PhotonPoseEstimator(apriltagPositions, camPosRelBotCenter);  
- 
+    public final PhotonPoseEstimator poseEstimatorInator; 
   //constructors
   public UniCamVisionSubsystem(String name, Transform3d camPosRelBotCenter) {
     //creating the camera
@@ -35,6 +33,9 @@ public class UniCamVisionSubsystem extends SubsystemBase {
     camName = name;
     //camera position data 
     this.camPosRelBotCenter = camPosRelBotCenter;
+    //pose estimation instantiation
+    poseEstimatorInator =
+      new PhotonPoseEstimator(apriltagPositions, camPosRelBotCenter);  
   }
 
   /*

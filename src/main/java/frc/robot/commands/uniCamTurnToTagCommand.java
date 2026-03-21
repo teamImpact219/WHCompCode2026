@@ -11,6 +11,7 @@ import java.util.ArrayList;
 //tag imports
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
+
 public class uniCamTurnToTagCommand extends Command {
   //variables
     //vision variables
@@ -20,7 +21,7 @@ public class uniCamTurnToTagCommand extends Command {
     SwerveRequest.FieldCentric driveCommand;
     //tag variables
     int id;
-    double targetYaw = Math.PI/49.0;
+    double targetYaw = 0;
     boolean foundTag = false;
   //constructor
   public uniCamTurnToTagCommand(
@@ -39,16 +40,21 @@ public class uniCamTurnToTagCommand extends Command {
     this.driveCommand = driveCommand;
   }
 
+  //NOTE: THE SAME COMMAND OBJECT CAN BE REUSED, YOU JUST NEED TO RESET THE PREVIOUSLY USED VARS 
+  // THINGS LIKE "targetYaw" WILL CARRY OVER FROM PREVIOUS USES AND MESS WITH COMMAND BEHAVIORS 
   @Override
-  public void initialize() {}
+  public void initialize() {
+    targetYaw = 0.0;
+
+  }
   @Override
   public void execute() {
-    
-    
+    foundTag = false;
     ArrayList<PhotonPipelineResult> result = vision.getNewPiplineResults();
       for (int i = result.size()-1; i >= 0; i--){
         PhotonTrackedTarget target = vision.findTag(id, result.get(i));
         if (target != null){
+          foundTag = true;
           targetYaw = Math.toRadians(target.yaw);
           break;
         }
@@ -62,7 +68,7 @@ public class uniCamTurnToTagCommand extends Command {
   @Override
   public boolean isFinished() {
     return 
-    //tick > maxtick || 
+    foundTag &&
     Math.abs(targetYaw) < Math.PI/50.0;
   }
 }

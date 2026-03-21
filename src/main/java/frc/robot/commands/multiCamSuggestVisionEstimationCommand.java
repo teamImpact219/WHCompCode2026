@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.targeting.PhotonPipelineResult;
 
+import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj2.command.Command;
 //subsystem imports
 import frc.robot.subsystems.UniCamVisionSubsystem;
@@ -23,14 +24,19 @@ public class multiCamSuggestVisionEstimationCommand extends Command {
   public multiCamSuggestVisionEstimationCommand(CommandSwerveDrivetrain drivetrain, MultiCamVisionSubsytem multiVisionSubsystem) {
     //reqs
     addRequirements(multiVisionSubsystem);
-    addRequirements(drivetrain);
+    for (UniCamVisionSubsystem UCVS: multiVision.getVisionSubsystems()){
+      addRequirements(UCVS);
+    }
     //assignmmnet
     multiVision = multiVisionSubsystem;
     this.drivetrain = drivetrain;
   }
 
   @Override
-  public void initialize() {
+  public void initialize() {}
+
+  @Override
+  public void execute() {
     for (UniCamVisionSubsystem vision: multiVision.getVisionSubsystems()){
       //literally the pose estimation suggestion code from the uni cam stuff lol
       ArrayList<PhotonPipelineResult> result = vision.getNewPiplineResults();
@@ -45,10 +51,8 @@ public class multiCamSuggestVisionEstimationCommand extends Command {
         }
       }
     }
-  }
 
-  @Override
-  public void execute() {}
+  }
 
   @Override
   public void end(boolean interrupted) {}

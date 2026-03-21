@@ -19,22 +19,14 @@ public class TriggerSubsystem extends SubsystemBase {
 
 
 
-
    public void runTrigger(){
-    
-   agitator.set(0.65);
+   agitator.set(0);
+    agitator.set(0.65);
     trigger.set(-1);
     isTriggerOn = 1.0;
     isAgitatorOn=.65;
    }
 
-   public void debugAgitator(){
-    agitator.set(0.2);
-   }
-
-    public void stopDebugAgitator(){
-    agitator.set(0);
-   }
 
    public void stopTrigger(){
     trigger.set(0);

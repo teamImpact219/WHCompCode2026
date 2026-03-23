@@ -24,9 +24,6 @@ public class ShooterSubsytem extends SubsystemBase {
 
    private  double isShooterOn = 0;
 
-   private final CurrentLimitsConfigs shooterMotorSettings = new CurrentLimitsConfigs()
-        .withSupplyCurrentLimitEnable(true)        
-        .withSupplyCurrentLimit(80);
    
    public void runShooter(){
     shooter.set(-1);
@@ -37,6 +34,12 @@ public class ShooterSubsytem extends SubsystemBase {
    public void runCloseShooter(){
     shooter.set(-0.83);
     isShooterOn=.83;
+   }
+
+   public void runCloserShooter(){
+    shooter.set(-0.68);
+    isShooterOn=0-.68;
+    
    }
 
 

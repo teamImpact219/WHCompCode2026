@@ -16,7 +16,7 @@ public class GroundHarvesterSubsystem extends SubsystemBase {
     return groundHarvest.getVelocity().getValueAsDouble()*60;
    }
   public void runGroundHarvest (){
-    groundHarvest.set(-0.3);
+    groundHarvest.set(-0.25);
     isGroundHarvOn = .3;
   }
 

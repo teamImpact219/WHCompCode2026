@@ -186,11 +186,6 @@ public class RobotContainer extends SubsystemBase{
         // Reset the field-centric heading on left bumper press.
         driverController.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
-        // Hold Y to continuously rotate the robot to face the scoring hub.
-        // The driver can still translate freely while holding Y.
-        driverController.y().whileTrue(
-            new FaceHubCommand(drivetrain, vision, driverController, MaxSpeed, MaxAngularRate));
-
 
 
         drivetrain.registerTelemetry(logger::telemeterize);

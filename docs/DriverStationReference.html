@@ -134,7 +134,8 @@
     .bg-y  { background: #e65100; } .bl-y  { border-color: #e65100; }
     .bg-lb { background: #6a1b9a; } .bl-lb { border-color: #6a1b9a; }
     .bg-rb { background: #6a1b9a; } .bl-rb { border-color: #6a1b9a; }
-    .bg-ax { background: #37474f; } .bl-ax { border-color: #37474f; }
+    .bg-ax   { background: #37474f; } .bl-ax   { border-color: #37474f; }
+    .bg-dpad { background: #f57f17; } .bl-dpad { border-color: #f57f17; }
 
     .desc { flex: 1; }
     .desc .act { font-size: 20px; font-weight: 900; color: #111; line-height: 1.1; }
@@ -241,19 +242,8 @@
         <line x1="598" y1="293" x2="636" y2="293" stroke="#66bb6a" stroke-width="2" stroke-dasharray="4,3"/>
         <rect x="636" y="274" width="105" height="38" rx="5"
               fill="#1b5e20" fill-opacity="0.92"/>
-        <text x="688" y="289" text-anchor="middle" fill="white" font-size="12" font-family="Arial" font-weight="bold">A &#8212; DROP HARVEST</text>
-        <text x="688" y="303" text-anchor="middle" fill="#a5d6a7" font-size="10" font-family="Arial">+ Agitator (toggle)</text>
-
-        <!-- X BUTTON highlight (ground harvest + agitator) -->
-        <circle cx="519" cy="254" r="26"
-                fill="#1565c0" fill-opacity="0.45"
-                stroke="#42a5f5" stroke-width="4" stroke-opacity="0.95"/>
-        <!-- X callout line going right and up -->
-        <line x1="545" y1="248" x2="636" y2="230" stroke="#42a5f5" stroke-width="2" stroke-dasharray="4,3"/>
-        <rect x="636" y="212" width="105" height="38" rx="5"
-              fill="#0d47a1" fill-opacity="0.92"/>
-        <text x="688" y="227" text-anchor="middle" fill="white" font-size="12" font-family="Arial" font-weight="bold">X &#8212; GROUND HARV</text>
-        <text x="688" y="241" text-anchor="middle" fill="#90caf9" font-size="10" font-family="Arial">+ Agitator (toggle)</text>
+        <text x="688" y="289" text-anchor="middle" fill="white" font-size="12" font-family="Arial" font-weight="bold">A &#8212; ALL HARVEST</text>
+        <text x="688" y="303" text-anchor="middle" fill="#a5d6a7" font-size="10" font-family="Arial">Drop + Ground + Agit (toggle)</text>
 
         <!-- Y BUTTON highlight (face hub) -->
         <circle cx="576" cy="208" r="26"
@@ -265,6 +255,26 @@
               fill="#bf360c" fill-opacity="0.92"/>
         <text x="688" y="191" text-anchor="middle" fill="white" font-size="12" font-family="Arial" font-weight="bold">Y &#8212; FACE HUB</text>
         <text x="688" y="205" text-anchor="middle" fill="#ffcc80" font-size="10" font-family="Arial">Auto-aim (hold)</text>
+
+        <!-- D-PAD LEFT highlight (speed boost) -->
+        <rect x="253" y="347" width="24" height="16" rx="4"
+              fill="#f57f17" fill-opacity="0.45"
+              stroke="#f57f17" stroke-width="2.5" stroke-opacity="0.95"/>
+        <line x1="263" y1="363" x2="90" y2="418" stroke="#f57f17" stroke-width="2" stroke-dasharray="4,3"/>
+        <rect x="4" y="413" width="175" height="30" rx="5"
+              fill="#e65100" fill-opacity="0.90"/>
+        <text x="91" y="426" text-anchor="middle" fill="white" font-size="12" font-family="Arial" font-weight="bold">D-LEFT &#8212; SPEED BOOST</text>
+        <text x="91" y="439" text-anchor="middle" fill="#ffcc80" font-size="10" font-family="Arial">2&#xD7; base speed (50% &#8594; 100%)</text>
+
+        <!-- D-PAD DOWN highlight (speed reset) -->
+        <rect x="284" y="364" width="16" height="24" rx="4"
+              fill="#2e7d32" fill-opacity="0.45"
+              stroke="#4caf50" stroke-width="2.5" stroke-opacity="0.95"/>
+        <line x1="292" y1="388" x2="100" y2="453" stroke="#4caf50" stroke-width="2" stroke-dasharray="4,3"/>
+        <rect x="4" y="448" width="175" height="30" rx="5"
+              fill="#1b5e20" fill-opacity="0.90"/>
+        <text x="91" y="461" text-anchor="middle" fill="white" font-size="12" font-family="Arial" font-weight="bold">D-DOWN &#8212; RESET SPEED</text>
+        <text x="91" y="474" text-anchor="middle" fill="#a5d6a7" font-size="10" font-family="Arial">Back to 50% base speed</text>
 
         <!-- Drive speed note box (top-left corner, above LB area) -->
         <rect x="4" y="4" width="142" height="30" rx="5"
@@ -309,17 +319,8 @@
       <div class="binding bl-a">
         <div class="bb bb-round bg-a">A</div>
         <div class="desc">
-          <div class="act">Drop Harvester + Agitator</div>
-          <div class="det">Runs drop harvester roller and agitator simultaneously &nbsp;&nbsp;Press again to stop</div>
-        </div>
-        <span class="tag tag-toggle">TOGGLE</span>
-      </div>
-
-      <div class="binding bl-x">
-        <div class="bb bb-round bg-x">X</div>
-        <div class="desc">
-          <div class="act">Ground Harvester + Agitator</div>
-          <div class="det">Runs ground intake roller and agitator simultaneously &nbsp;&nbsp;Press again to stop</div>
+          <div class="act">Drop + Ground Harvest + Agitator</div>
+          <div class="det">Runs all three intake mechanisms simultaneously &nbsp;&nbsp;Press again to stop all</div>
         </div>
         <span class="tag tag-toggle">TOGGLE</span>
       </div>
@@ -331,6 +332,26 @@
           <div class="det">Rotates robot to aim at scoring hub using vision &nbsp;&nbsp;Release to resume manual rotation</div>
         </div>
         <span class="tag tag-hold">HOLD</span>
+      </div>
+
+      <div class="section-lbl" style="margin-top:6px;">Speed Control &mdash; D-Pad</div>
+
+      <div class="binding bl-dpad">
+        <div class="bb bb-pill bg-dpad">D &#9664;</div>
+        <div class="desc">
+          <div class="act">Speed Boost</div>
+          <div class="det">Doubles drive speed (50% &rarr; 100%) &nbsp;&nbsp;Use for fast repositioning</div>
+        </div>
+        <span class="tag tag-instant">INSTANT</span>
+      </div>
+
+      <div class="binding bl-dpad">
+        <div class="bb bb-pill bg-dpad">D &#9660;</div>
+        <div class="desc">
+          <div class="act">Reset Speed</div>
+          <div class="det">Returns to 50% base speed &nbsp;&nbsp;Use for precise control</div>
+        </div>
+        <span class="tag tag-instant">INSTANT</span>
       </div>
     </div>
   </div>
@@ -362,6 +383,17 @@
 
         <!-- ── OPERATOR PAGE ANNOTATIONS ── -->
 
+        <!-- LEFT BUMPER highlight (closer shot) -->
+        <rect x="152" y="97" width="112" height="28" rx="10"
+              fill="#6a1b9a" fill-opacity="0.35"
+              stroke="#ce93d8" stroke-width="3" stroke-opacity="0.9"/>
+        <!-- LB callout line to top label -->
+        <line x1="207" y1="97" x2="246" y2="68" stroke="#ce93d8" stroke-width="2" stroke-dasharray="5,3"/>
+        <rect x="164" y="38" width="165" height="30" rx="6"
+              fill="#4a148c" fill-opacity="0.92"/>
+        <text x="246" y="50" text-anchor="middle" fill="white" font-size="13" font-family="Arial" font-weight="bold">LB &#8212; CLOSER SHOT</text>
+        <text x="246" y="63" text-anchor="middle" fill="#ce93d8" font-size="10" font-family="Arial">Shooter 68% power (toggle)</text>
+
         <!-- RIGHT BUMPER highlight (long shot) -->
         <rect x="500" y="97" width="118" height="28" rx="10"
               fill="#6a1b9a" fill-opacity="0.40"
@@ -382,7 +414,7 @@
         <rect x="340" y="192" width="170" height="32" rx="5"
               fill="#bf360c" fill-opacity="0.90"/>
         <text x="425" y="205" text-anchor="middle" fill="white" font-size="12" font-family="Arial" font-weight="bold">Y &#8212; RAISE HARVESTER</text>
-        <text x="425" y="218" text-anchor="middle" fill="#ffcc80" font-size="10" font-family="Arial">Auto-stops at top limit switch</text>
+        <text x="425" y="218" text-anchor="middle" fill="#ffcc80" font-size="10" font-family="Arial">Raises to dump/scoring position</text>
 
         <!-- X BUTTON highlight (close shot) -->
         <circle cx="519" cy="254" r="26"
@@ -460,6 +492,15 @@
         <span class="tag tag-toggle">TOGGLE</span>
       </div>
 
+      <div class="binding bl-lb">
+        <div class="bb bb-pill bg-lb">LB</div>
+        <div class="desc">
+          <div class="act">Closer Shot</div>
+          <div class="det">Shooter at 68% power &nbsp;&nbsp;Short-range / closer than X &nbsp;&nbsp;Press again to stop</div>
+        </div>
+        <span class="tag tag-toggle">TOGGLE</span>
+      </div>
+
       <div class="binding bl-rb">
         <div class="bb bb-pill bg-rb">RB</div>
         <div class="desc">
@@ -484,7 +525,7 @@
         <div class="bb bb-round bg-y">Y</div>
         <div class="desc">
           <div class="act">Raise Drop Harvester</div>
-          <div class="det">Lifts to stow position &nbsp;&nbsp;Auto-stops at top limit switch</div>
+          <div class="det">Raises to dump/scoring position &nbsp;&nbsp;Stops at limit switch</div>
         </div>
         <span class="tag tag-toggle">TOGGLE</span>
       </div>

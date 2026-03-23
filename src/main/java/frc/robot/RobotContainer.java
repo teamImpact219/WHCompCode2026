@@ -47,11 +47,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class RobotContainer extends SubsystemBase{
 
-        //private double slowSpeed=.25;
-
     public final CommandSwerveDrivetrain drivetrain = TunerConstants3.createDrivetrain();
-    private double MaxSpeed = .5;  
-                                                                                       // speed
+    private final double BASE_SPEED = 0.5 * TunerConstants3.kSpeedAt12Volts.in(MetersPerSecond);
+    private final double[] MaxSpeed = { BASE_SPEED };
+    
+    // speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); //was .75 now .5 2-28-26        3/4 of a rotation per second
                                                                                       // max angular velocity
     // not swerev variables
@@ -72,12 +72,12 @@ public class RobotContainer extends SubsystemBase{
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-            .withDeadband(MaxSpeed * 0.2).withRotationalDeadband(MaxAngularRate * 0.2) // Add a 10% deadband
+            .withDeadband(BASE_SPEED * 0.2).withRotationalDeadband(MaxAngularRate * 0.2) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
-    private final Telemetry logger = new Telemetry(MaxSpeed);
+    private final Telemetry logger = new Telemetry(BASE_SPEED);
 
     private final CommandXboxController driverController = new CommandXboxController(0);
     //VISION STUFF
@@ -155,16 +155,17 @@ public class RobotContainer extends SubsystemBase{
         bindJoystickA();
         bindJoystickb();
         bindRightBumper();
-        // bindLeftDPad();
-        // bindRightDPad();
-        //bindUpDPad();
+        bindLeftBumper();
+        bindLeftDPad();
+        bindDownDPad();
+
 
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(
                // Drivetrain will execute this command periodically
-                drivetrain.applyRequest(() -> drive.withVelocityX(-driverController.getLeftY() * Math.pow((driverController.getLeftY()),2)* MaxSpeed)    
-                        .withVelocityY(-driverController.getLeftX()* Math.pow((driverController.getLeftX()),2)* MaxSpeed) // Drive left with negative X (left)
+                drivetrain.applyRequest(() -> drive.withVelocityX(-driverController.getLeftY() * Math.pow((driverController.getLeftY()),2)* MaxSpeed[0])    
+                        .withVelocityY(-driverController.getLeftX()* Math.pow((driverController.getLeftX()),2)* MaxSpeed[0]) // Drive left with negative X (left)
                         .withRotationalRate(-driverController.getRightX() * Math.pow((driverController.getRightX()),2)* MaxAngularRate) // Drive counterclockwise
                                                                                             // with negative X (left)
                 ));
@@ -205,23 +206,43 @@ public class RobotContainer extends SubsystemBase{
 
     // START OF THE BUTTON PRESSES
 
-//         private void bindLeftDPad() {
-//         driverController.povLeft()
-//     .toggleOnTrue(drivetrain.runOnce( () -> drivetrain.setSpeedMultiplier(0.5)));
-//         }
+    
+     private void bindLeftDPad() {
+        // Left D-pad: boost to 2x base speed
+        driverController.povLeft().onTrue(
+            Commands.runOnce(() -> {
+                MaxSpeed[0] = BASE_SPEED * 2.0;
+                SmartDashboard.putNumber("MaxSpeed", MaxSpeed[0]);
+                System.out.println("LEFT D-PAD PRESSED — BOOST ACTIVATED");
+                System.out.println("Base Speed:    " + BASE_SPEED + " m/s");
+                System.out.println("Current Speed: " + MaxSpeed[0] + " m/s  (2x)");
+            })
+        );
 
-//         private void bindRightDPad() {
-//         driverController.povRight()
-//     .toggleOnTrue(drivetrain.runOnce( () -> drivetrain.setSpeedMultiplier(1.0)));
-//         }
 
 
-//          private void bindRightDPad() {
-//         driverController.povRight()
-//     .toggleOnTrue(drivetrain.runOnce( () -> drivetrain.setSpeedMultiplier(1.0)));
+
+       
+    }
+ 
+    private void bindDownDPad() {
+        // Down D-pad: reset back to base speed
+        driverController.povDown().onTrue(
+            Commands.runOnce(() -> {
+                MaxSpeed[0] = BASE_SPEED;
+                SmartDashboard.putNumber("MaxSpeed", MaxSpeed[0]);
+                System.out.println("DOWN D-PAD PRESSED — SPEED RESET");
+                System.out.println("Current Speed: " + MaxSpeed[0] + " m/s  (back to base)");
+            })
+        );
+    }
+
+
+
 
 //     System.out.println("fast");
 //         }
+    //added by Max; for vision control
     private void bindVisionController(){
         driverController.b().whileTrue(turnToCommand);
 
@@ -239,10 +260,15 @@ public class RobotContainer extends SubsystemBase{
 
         // toggle ground harvest on and off with the press of a button
         driverController.a().toggleOnTrue(
-
                 harv.startEnd(
                         () -> harv.runDropHarvest(),
                         () -> harv.stopDropHarvest()));
+        
+        driverController.a().toggleOnTrue(
+                groundHarv.startEnd(
+                        () -> groundHarv.runGroundHarvest(), // Start action
+                        () -> groundHarv.stopHarvest() // End action
+                ));
 
         driverController.a().toggleOnTrue(
                 trigger.startEnd(
@@ -252,10 +278,14 @@ public class RobotContainer extends SubsystemBase{
     }
 
      private void bindJoysticky() {
-
         codriverController.y().toggleOnTrue((harv.startEnd(
-        () -> harv.raiseDropHarvest(),
+        () -> harv.raiseForDump(),
         () -> harv.stopMoving())));
+
+        //UNCOMMENT THIS AND DEPLOY TO RAISE DROP HARVESTER INTO FRAME BEFORE MATCHES
+        // codriverController.y().toggleOnTrue((harv.startEnd(
+        // () -> harv.raiseDropharvest(),
+        // () -> harv.stopMoving())));
 
     }
 
@@ -268,20 +298,7 @@ public class RobotContainer extends SubsystemBase{
                         () -> shooter.stopShooter() // End action
                 ));
 
-        // runs the drop down harvester
-        driverController.x().toggleOnTrue(
-                groundHarv.startEnd(
-                        () -> groundHarv.runGroundHarvest(), // Start action
-                        () -> groundHarv.stopHarvest() // End action
-                ));
-
-
-        driverController.x().toggleOnTrue(
-                trigger.startEnd(
-                        () -> trigger.runAgitatorCmd(), // Start action
-                        () -> trigger.stopAgitatorCmd() // End action
-                ));
-    }
+     }
 
 
     //THIS IS FOR DEBUGGING THE AGITATOR UNTILL IT WORKS AS INTENED (MECHANICAL PROBLEM)
@@ -297,15 +314,16 @@ public class RobotContainer extends SubsystemBase{
     }
 
 
-
-//          public void bindLeftDPad(){
-//        driverController.povLeft().onTrue(Commands.runOnce( () -> drivetrain.toggleFieldRelative()));    
-//         }
-
-
         public void bindRightBumper(){
                 codriverController.rightBumper().toggleOnTrue(shooter.startEnd( ()->
                 shooter.runShooter(),
+                () -> shooter.stopShooter()));
+
+        }
+
+        public void bindLeftBumper(){
+                codriverController.leftBumper().toggleOnTrue(shooter.startEnd( ()->
+                shooter.runCloserShooter(),
                 () -> shooter.stopShooter()));
 
         }

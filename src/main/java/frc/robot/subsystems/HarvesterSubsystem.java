@@ -26,20 +26,8 @@ public class HarvesterSubsystem extends SubsystemBase {
   private final DigitalInput botSwitch = new DigitalInput(1);
 
 
-
-
-  //make it a hold until it reaches the limit switch. 
-
-  // public void raiseHarvester (){
-  //   dropharvest.set(0.3);
-  // }
-
-  // public void dropHarvester (){
-  //   dropharvest.set(-0.3); //negative is counter-clockwise = drop harvester
-  // }
-
   public void runDropHarvest(){
-    runDropHarvester.set(1);
+    runDropHarvester.set(-1);
     isHarvOn = 1;
   }
   
@@ -56,6 +44,7 @@ public class HarvesterSubsystem extends SubsystemBase {
 
    public void stopMoving(){
     dropHarvest.set(0);
+    runDropHarvester.set(0);
   }
 
 
@@ -81,44 +70,63 @@ public class HarvesterSubsystem extends SubsystemBase {
   };
 
 
+
+  //negative is down and postive is up for harvester moving
+
+
   public void raiseDropHarvest(){
     double startTime = System.currentTimeMillis();
-    System.out.println(!topSwitch.get());
-
-    //dropHarvest.set(.2);
+    System.out.println(topSwitch.get());
+//pushed false
+//unpushed true
 
     if(!topSwitch.get()){
         dropHarvest.set(0);
 
       }
-      while(topSwitch.get() && (System.currentTimeMillis()- startTime) < 2400){
-        dropHarvest.set(-.15);
+      while(topSwitch.get() && (System.currentTimeMillis()- startTime) < 2100){
+        dropHarvest.set(.25);
         
       }
       dropHarvest.set(0);
 
   }
 
+
+  public void raiseForDump(){
+    runDropHarvester.set(0);
+    runDropHarvester.set(-1);
+
+    
+    if(topSwitch.get())
+    {
+      dropHarvest.set(0.3);
+    }
+    else{
+      dropHarvest.set(0);
+    }
+
+  }
+
+
+
   public void lowerDropHarvest(){
     double startTime = System.currentTimeMillis();
-    System.out.println(!botSwitch.get());
-
-    //dropHarvest.set(.2);
+    System.out.println(botSwitch.get());
+    runDropHarvester.set(0);
+//pushed false
+//unpushed true
 
     if(!botSwitch.get()){
         dropHarvest.set(0);
 
       }
-      while(botSwitch.get() && (System.currentTimeMillis()- startTime) < 2500){
-        dropHarvest.set(.15);
+      while(botSwitch.get() && (System.currentTimeMillis()- startTime) < 2200){
+        dropHarvest.set(-.3);
         
       }
       dropHarvest.set(0);
 
-  }
-
-  public double getIsHarvOn(){
-    return isHarvOn;
   }
 
 

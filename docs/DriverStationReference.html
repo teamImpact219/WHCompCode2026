@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Team 219 Driver Station Reference</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #f0f0f0;
+      padding: 12px;
+      font-size: 13px;
+    }
+
+    @media print {
+      body { background: white; padding: 6px; font-size: 11px; }
+      .page { box-shadow: none; }
+    }
+
+    .page {
+      background: white;
+      max-width: 1000px;
+      margin: 0 auto;
+      border-radius: 10px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+      overflow: hidden;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+      color: white;
+      text-align: center;
+      padding: 14px 20px 10px;
+      border-bottom: 4px solid #e94560;
+    }
+    .header h1 {
+      font-size: 24px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #e94560;
+    }
+    .header p {
+      font-size: 11px;
+      color: #aaa;
+      margin-top: 2px;
+      letter-spacing: 1px;
+    }
+    .team-num {
+      font-size: 14px;
+      color: #ccc;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+
+    /* ── TWO-COLUMN LAYOUT ── */
+    .controllers {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+
+    .controller-panel {
+      padding: 14px 16px;
+    }
+
+    .driver-panel {
+      background: #eaf4ff;
+      border-right: 3px solid #1565c0;
+    }
+
+    .operator-panel {
+      background: #fff3e0;
+    }
+
+    .panel-title {
+      font-size: 15px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      padding: 8px 12px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .driver-title {
+      background: #1565c0;
+      color: white;
+    }
+
+    .operator-title {
+      background: #e65100;
+      color: white;
+    }
+
+    .port-badge {
+      font-size: 10px;
+      background: rgba(255,255,255,0.25);
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-weight: normal;
+      letter-spacing: 0;
+      margin-left: auto;
+    }
+
+    /* ── SECTION HEADERS ── */
+    .section-label {
+      font-size: 10px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin: 10px 0 5px;
+      padding-bottom: 2px;
+      border-bottom: 1px solid rgba(0,0,0,0.15);
+      color: #555;
+    }
+
+    /* ── BINDING ROWS ── */
+    .binding {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 6px;
+      padding: 5px 7px;
+      border-radius: 5px;
+      background: rgba(255,255,255,0.7);
+      border-left: 4px solid transparent;
+    }
+
+    .binding:hover { opacity: 0.9; }
+
+    /* Left border colors per button */
+    .btn-a  { border-color: #4caf50; }
+    .btn-b  { border-color: #f44336; }
+    .btn-x  { border-color: #2196f3; }
+    .btn-y  { border-color: #ff9800; }
+    .btn-lb { border-color: #9c27b0; }
+    .btn-rb { border-color: #9c27b0; }
+    .axis   { border-color: #607d8b; }
+    .btn-combo { border-color: #795548; }
+
+    /* ── BUTTON BADGES ── */
+    .btn-badge {
+      flex-shrink: 0;
+      font-size: 10px;
+      font-weight: bold;
+      padding: 3px 7px;
+      border-radius: 4px;
+      color: white;
+      min-width: 50px;
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    .badge-a  { background: #4caf50; }
+    .badge-b  { background: #f44336; }
+    .badge-x  { background: #2196f3; }
+    .badge-y  { background: #ff9800; color: #222; }
+    .badge-lb, .badge-rb { background: #7b1fa2; }
+    .badge-axis { background: #546e7a; font-size: 9px; }
+    .badge-combo { background: #5d4037; font-size: 9px; }
+
+    /* ── DESCRIPTION TEXT ── */
+    .desc {
+      flex: 1;
+    }
+    .desc strong {
+      display: block;
+      font-size: 12px;
+      color: #222;
+      line-height: 1.3;
+    }
+    .desc small {
+      font-size: 10px;
+      color: #666;
+      display: block;
+      margin-top: 1px;
+    }
+
+    /* ── TOGGLE TAG ── */
+    .tag {
+      font-size: 9px;
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-weight: bold;
+      flex-shrink: 0;
+      align-self: center;
+    }
+    .tag-toggle { background: #ede7f6; color: #512da8; }
+    .tag-hold   { background: #e8f5e9; color: #2e7d32; }
+    .tag-instant{ background: #e3f2fd; color: #1565c0; }
+
+    /* ── DRIVE AXES BOX ── */
+    .axes-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px;
+      margin-bottom: 4px;
+    }
+    .axis-card {
+      background: rgba(255,255,255,0.8);
+      border: 1px solid #b0bec5;
+      border-radius: 5px;
+      padding: 5px 8px;
+      font-size: 11px;
+    }
+    .axis-card .axis-name {
+      font-weight: bold;
+      font-size: 10px;
+      color: #37474f;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .axis-card .axis-action {
+      color: #1a1a1a;
+      margin-top: 2px;
+    }
+    .axis-note {
+      font-size: 9px;
+      color: #78909c;
+      margin-top: 1px;
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      background: #1a1a2e;
+      color: #aaa;
+      text-align: center;
+      font-size: 10px;
+      padding: 7px;
+      letter-spacing: 1px;
+    }
+    .footer strong { color: #e94560; }
+
+    /* ── NOTES BOX ── */
+    .notes-bar {
+      background: #fff8e1;
+      border-top: 2px solid #ffd54f;
+      padding: 8px 16px;
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .note-item {
+      font-size: 10px;
+      color: #555;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .note-item .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="team-num">TEAM 219 &nbsp;·&nbsp; WEST HARTFORD</div>
+    <h1>Driver Station Quick Reference</h1>
+    <p>2026 Competition Season &nbsp;·&nbsp; Print and keep at driver station</p>
+  </div>
+
+  <!-- CONTROLLER PANELS -->
+  <div class="controllers">
+
+    <!-- ═══════════════════════════════════════════════
+         DRIVER CONTROLLER  (Port 0)
+    ════════════════════════════════════════════════ -->
+    <div class="controller-panel driver-panel">
+      <div class="panel-title driver-title">
+        <span>&#127918; Driver</span>
+        <span class="port-badge">USB Port 0</span>
+      </div>
+
+      <!-- DRIVE AXES -->
+      <div class="section-label">Drivetrain — Field-Centric Swerve</div>
+      <div class="axes-grid">
+        <div class="axis-card">
+          <div class="axis-name">Left Stick Y</div>
+          <div class="axis-action">Forward / Backward</div>
+          <div class="axis-note">Squared response &nbsp;|&nbsp; 20% deadband</div>
+        </div>
+        <div class="axis-card">
+          <div class="axis-name">Left Stick X</div>
+          <div class="axis-action">Strafe Left / Right</div>
+          <div class="axis-note">Squared response &nbsp;|&nbsp; 20% deadband</div>
+        </div>
+        <div class="axis-card">
+          <div class="axis-name">Right Stick X</div>
+          <div class="axis-action">Rotate (Yaw)</div>
+          <div class="axis-note">Squared response &nbsp;|&nbsp; 20% deadband</div>
+        </div>
+        <div class="axis-card" style="border-color:#7b1fa2;">
+          <div class="axis-name" style="color:#6a1b9a;">Left Bumper (LB)</div>
+          <div class="axis-action" style="font-weight:bold;">Reset Field-Centric Heading</div>
+          <div class="axis-note">Press once to re-zero forward direction</div>
+        </div>
+      </div>
+
+      <!-- MECHANISM BUTTONS -->
+      <div class="section-label">Mechanism Controls</div>
+
+      <div class="binding btn-a">
+        <div class="btn-badge badge-a">A</div>
+        <div class="desc">
+          <strong>Drop Harvester &amp; Agitator</strong>
+          <small>Runs drop harvester roller + agitator simultaneously</small>
+        </div>
+        <span class="tag tag-toggle">TOGGLE</span>
+      </div>
+
+      <div class="binding btn-x">
+        <div class="btn-badge badge-x">X</div>
+        <div class="desc">
+          <strong>Ground Harvester &amp; Agitator</strong>
+          <small>Runs ground intake roller + agitator simultaneously</small>
+        </div>
+        <span class="tag tag-toggle">TOGGLE</span>
+      </div>
+
+      <!-- SYS ID (hidden/dev) -->
+      <div class="section-label">Engineering / Tuning Only</div>
+
+      <div class="binding btn-combo">
+        <div class="btn-badge badge-combo">BACK<br>+ Y</div>
+        <div class="desc">
+          <strong>SysId Dynamic — Forward</strong>
+          <small>Drivetrain system identification</small>
+        </div>
+        <span class="tag tag-hold">HOLD</span>
+      </div>
+
+      <div class="binding btn-combo">
+        <div class="btn-badge badge-combo">BACK<br>+ X</div>
+        <div class="desc">
+          <strong>SysId Dynamic — Reverse</strong>
+          <small>Drivetrain system identification</small>
+        </div>
+        <span class="tag tag-hold">HOLD</span>
+      </div>
+
+      <div class="binding btn-combo">
+        <div class="btn-badge badge-combo">START<br>+ Y</div>
+        <div class="desc">
+          <strong>SysId Quasistatic — Forward</strong>
+          <small>Drivetrain system identification</small>
+        </div>
+        <span class="tag tag-hold">HOLD</span>
+      </div>
+
+      <div class="binding btn-combo">
+        <div class="btn-badge badge-combo">START<br>+ X</div>
+        <div class="desc">
+          <strong>SysId Quasistatic — Reverse</strong>
+          <small>Drivetrain system identification</small>
+        </div>
+        <span class="tag tag-hold">HOLD</span>
+      </div>
+
+    </div><!-- /driver-panel -->
+
+
+    <!-- ═══════════════════════════════════════════════
+         OPERATOR CONTROLLER  (Port 1)
+    ════════════════════════════════════════════════ -->
+    <div class="controller-panel operator-panel">
+      <div class="panel-title operator-title">
+        <span>&#9881;&#65039; Operator</span>
+        <span class="port-badge">USB Port 1</span>
+      </div>
+
+      <!-- SHOOTING -->
+      <div class="section-label">Shooting</div>
+
+      <div class="binding btn-x">
+        <div class="btn-badge badge-x">X</div>
+        <div class="desc">
+          <strong>Close-Range Shot</strong>
+          <small>Shooter at 83% power &nbsp;·&nbsp; ~9 ft 5 in range</small>
+        </div>
+        <span class="tag tag-toggle">TOGGLE</span>
+      </div>
+
+      <div class="binding btn-rb">
+        <div class="btn-badge badge-rb">RB</div>
+        <div class="desc">
+          <strong>Long-Range Shot</strong>
+          <small>Shooter at 100% power &nbsp;·&nbsp; full distance</small>
+        </div>
+        <span class="tag tag-toggle">TOGGLE</span>
+      </div>
+
+      <div class="binding btn-a">
+        <div class="btn-badge badge-a">A</div>
+        <div class="desc">
+          <strong>Run Trigger / Feed</strong>
+          <small>Feeds note into shooter (trigger + agitator)</small>
+        </div>
+        <span class="tag tag-toggle">TOGGLE</span>
+      </div>
+
+      <!-- HARVESTER POSITION -->
+      <div class="section-label">Drop Harvester Position</div>
+
+      <div class="binding btn-y">
+        <div class="btn-badge badge-y">Y</div>
+        <div class="desc">
+          <strong>Raise Drop Harvester</strong>
+          <small>Lifts harvester to stow position &nbsp;·&nbsp; auto-stops at top limit switch</small>
+        </div>
+        <span class="tag tag-toggle">TOGGLE</span>
+      </div>
+
+      <div class="binding btn-b">
+        <div class="btn-badge badge-b">B</div>
+        <div class="desc">
+          <strong>Lower Drop Harvester</strong>
+          <small>Drops harvester to deploy position &nbsp;·&nbsp; auto-stops at bottom limit switch</small>
+        </div>
+        <span class="tag tag-toggle">TOGGLE</span>
+      </div>
+
+      <!-- BLANK SPACE TO BALANCE LAYOUT -->
+      <div style="height: 12px;"></div>
+
+      <!-- SHOOTING WORKFLOW GUIDE -->
+      <div style="background:#fff3e0; border:1px solid #ffb74d; border-radius:6px; padding:9px 11px; margin-top:6px;">
+        <div style="font-size:11px; font-weight:bold; color:#e65100; margin-bottom:6px; text-transform:uppercase; letter-spacing:1px;">Shooting Workflow</div>
+        <div style="font-size:11px; color:#333; line-height:1.8;">
+          <span style="background:#ff9800; color:white; border-radius:3px; padding:1px 5px; font-weight:bold; font-size:10px;">1</span>
+          &nbsp;Spin up shooter &nbsp;<b>[X]</b> or <b>[RB]</b><br>
+          <span style="background:#ff9800; color:white; border-radius:3px; padding:1px 5px; font-weight:bold; font-size:10px;">2</span>
+          &nbsp;Confirm shooter speed is ready<br>
+          <span style="background:#ff9800; color:white; border-radius:3px; padding:1px 5px; font-weight:bold; font-size:10px;">3</span>
+          &nbsp;Press <b>[A]</b> to feed note with trigger<br>
+          <span style="background:#ff9800; color:white; border-radius:3px; padding:1px 5px; font-weight:bold; font-size:10px;">4</span>
+          &nbsp;Toggle off after note is launched
+        </div>
+      </div>
+
+    </div><!-- /operator-panel -->
+  </div><!-- /controllers -->
+
+  <!-- NOTES BAR -->
+  <div class="notes-bar">
+    <div class="note-item">
+      <div class="dot" style="background:#512da8;"></div>
+      <span><strong>TOGGLE</strong> = press once to start, press again to stop</span>
+    </div>
+    <div class="note-item">
+      <div class="dot" style="background:#2e7d32;"></div>
+      <span><strong>HOLD</strong> = active only while button is held</span>
+    </div>
+    <div class="note-item">
+      <div class="dot" style="background:#1565c0;"></div>
+      <span><strong>Drive speed:</strong> 50% max &nbsp;|&nbsp; <strong>Rotation:</strong> 0.75 rot/sec</span>
+    </div>
+    <div class="note-item">
+      <div class="dot" style="background:#c62828;"></div>
+      <span><strong>LB (Driver)</strong> resets heading if robot direction drifts</span>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <strong>Team 219 &mdash; West Hartford &nbsp;</strong>
+    &nbsp;|&nbsp; WHCompCode2026 &nbsp;|&nbsp; Auto: <strong>rightPlayer</strong>
+  </div>
+
+</div>
+</body>
+</html>

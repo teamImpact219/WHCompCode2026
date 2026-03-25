@@ -111,9 +111,9 @@ public class RobotContainer extends SubsystemBase{
 
         NamedCommands.registerCommand("stopShooter", shooter.stopTalonCmd());
          
-        NamedCommands.registerCommand("Dropharvest", harv.dropHarvestCMD());
+        NamedCommands.registerCommand("Dropharvest", harv.lowerHarvesterCmd());
 
-        NamedCommands.registerCommand("RaiseHarvest", harv.raiseHarvestCmd());
+        NamedCommands.registerCommand("RaiseHarvest", harv.raiseForDumpCmd());
 
         NamedCommands.registerCommand("LongShot", shooter.runLongShotCmd());
 

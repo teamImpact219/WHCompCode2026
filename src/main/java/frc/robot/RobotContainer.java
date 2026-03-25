@@ -37,7 +37,6 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 
@@ -69,7 +68,7 @@ public class RobotContainer extends SubsystemBase{
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-            .withDeadband(BASE_SPEED * 0.2).withRotationalDeadband(MaxAngularRate * 0.2) // Add a 10% deadband
+            .withDeadband(BASE_SPEED * 0.2).withRotationalDeadband(MaxAngularRate * 0.2) // Add a 20% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
@@ -204,9 +203,12 @@ public class RobotContainer extends SubsystemBase{
                 System.out.println("Current Speed: " + MaxSpeed[0] + " m/s  (2x)");
             })
         );
-        codriverController.povLeft().toggleOnTrue((harv.startEnd(
-        () -> harv.raiseDropHarvest(),
-        () -> harv.stopMoving())));
+        // codriverController.povLeft().toggleOnTrue((harv.startEnd(
+        // () -> harv.raiseHarvestCmd(),
+        // () -> harv.stopMoving())));
+
+
+        codriverController.povLeft().onTrue(harv.raiseHarvesterCmd());
 
     }
  
@@ -269,9 +271,12 @@ public class RobotContainer extends SubsystemBase{
     }
 
      private void bindJoysticky() {
-        codriverController.y().toggleOnTrue((harv.startEnd(
-        () -> harv.raiseForDump(),
-        () -> harv.stopMoving())));
+        // codriverController.y().toggleOnTrue((harv.startEnd(
+        // () -> harv.raiseForDump(),
+        // () -> harv.stopMoving())));
+
+
+        codriverController.y().onTrue(harv.raiseForDumpCmd());
 
     }
 
@@ -291,9 +296,13 @@ public class RobotContainer extends SubsystemBase{
      private void bindJoystickb() {
 
 
-        codriverController.b().toggleOnTrue((harv.startEnd(
-        () -> harv.lowerDropHarvest(),
-        () -> harv.stopMoving())));
+        // codriverController.b().toggleOnTrue((harv.startEnd(
+        // () -> harv.lowerDropHarvest(),
+        // () -> harv.stopMoving())));
+
+
+
+        codriverController.b().onTrue(harv.lowerHarvesterCmd());
     }
 
 

@@ -101,7 +101,9 @@ public class Robot extends TimedRobot {
         m_robotContainer.shooter.stopShooter();
         m_robotContainer.harv.stopDropHarvest();
         m_robotContainer.trigger.stopTrigger();
-        m_robotContainer.trigger.stopAgitatorCmd();
+        m_robotContainer.trigger.stopAgitatorCmd2();
+        m_robotContainer.groundHarv.stopGroundHarvestCmd();
+        
 
     }
 

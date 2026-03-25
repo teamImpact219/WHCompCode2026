@@ -5,15 +5,9 @@
     "data": {
       "commands": [
         {
-          "type": "sequential",
+          "type": "parallel",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Dropharvest"
-                }
-              },
               {
                 "type": "path",
                 "data": {
@@ -23,13 +17,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "runAgitator"
+                  "name": "Dropharvest"
                 }
               },
               {
-                "type": "wait",
+                "type": "named",
                 "data": {
-                  "waitTime": 1.0
+                  "name": "runAgitator"
                 }
               }
             ]
@@ -39,6 +33,12 @@
           "type": "named",
           "data": {
             "name": "LongShot"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
           }
         },
         {
@@ -74,13 +74,13 @@
         {
           "type": "named",
           "data": {
-            "name": "stopTrigger"
+            "name": "Dropharvest"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Dropharvest"
+            "name": "stopTrigger"
           }
         },
         {

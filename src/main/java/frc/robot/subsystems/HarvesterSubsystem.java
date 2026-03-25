@@ -38,17 +38,10 @@ public class HarvesterSubsystem extends SubsystemBase {
   public double getDropHarvRPM() {
     return runDropHarvester.getEncoder().getVelocity();
    }
-
-
-
    public void stopMoving(){
     dropHarvest.set(0);
     runDropHarvester.set(0);
   }
-
-
-
-
 
 
   public Command dropHarvestCMD(){
@@ -69,7 +62,7 @@ public class HarvesterSubsystem extends SubsystemBase {
   };
 
 
-
+  
   //negative is down and postive is up for harvester moving
 
 //pushed false
@@ -181,7 +174,7 @@ public class HarvesterSubsystem extends SubsystemBase {
 
         @Override
         public boolean isFinished() {
-          return !topSwitch.get() || (System.currentTimeMillis() - startTime) > 1400;
+          return !topSwitch.get() || (System.currentTimeMillis() - startTime) > 1300;
         }
 
         @Override

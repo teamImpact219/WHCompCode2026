@@ -84,7 +84,7 @@ public class RobotContainer extends SubsystemBase{
     //update the cameras position
     //trun to (button b) goes wtih co driver controller 
     public final UniCamVisionSubsystem vision = new UniCamVisionSubsystem("ACER_HD_User_Facing", new Transform3d());
-    public final uniCamTurnToTagCommand turnToCommand = new uniCamTurnToTagCommand(0, vision, drivetrain, drive);
+    public final uniCamTurnToTagCommand turnToCommand = new uniCamTurnToTagCommand(new int[]{9, 10, 25, 26}, vision, drivetrain, drive);
     public final uniCamSuggestVisionEstimationCommand visionEstimation = new uniCamSuggestVisionEstimationCommand(drivetrain, vision);
 
 

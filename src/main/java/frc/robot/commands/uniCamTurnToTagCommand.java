@@ -20,15 +20,15 @@ public class uniCamTurnToTagCommand extends Command {
     CommandSwerveDrivetrain drivetrain;
     SwerveRequest.FieldCentric driveCommand;
     //tag variables
-    int id;
+    int[] ids;
     double targetYaw = 0;
     boolean foundTag = false;
   //constructor
   public uniCamTurnToTagCommand(
-    int id, UniCamVisionSubsystem vision,
-     CommandSwerveDrivetrain drivetrain, 
+    int[] ids, UniCamVisionSubsystem vision,
+     CommandSwerveDrivetrain drivetrain,
      SwerveRequest.FieldCentric driveCommand
-     ) 
+     )
   {
     //reqs
     addRequirements(drivetrain);
@@ -36,7 +36,7 @@ public class uniCamTurnToTagCommand extends Command {
     //assignment
     this.drivetrain = drivetrain;
     this.vision = vision;
-    this.id = id;
+    this.ids = ids;
     this.driveCommand = driveCommand;
   }
 
@@ -51,12 +51,15 @@ public class uniCamTurnToTagCommand extends Command {
   public void execute() {
     foundTag = false;
     ArrayList<PhotonPipelineResult> result = vision.getNewPiplineResults();
+      outer:
       for (int i = result.size()-1; i >= 0; i--){
-        PhotonTrackedTarget target = vision.findTag(id, result.get(i));
-        if (target != null){
-          foundTag = true;
-          targetYaw = Math.toRadians(target.yaw);
-          break;
+        for (int id : ids) {
+          PhotonTrackedTarget target = vision.findTag(id, result.get(i));
+          if (target != null){
+            foundTag = true;
+            targetYaw = Math.toRadians(target.yaw);
+            break outer;
+          }
         }
       }
       drivetrain.setControl(driveCommand.withVelocityX(0).withVelocityY(0).withRotationalRate(-0.5*targetYaw));

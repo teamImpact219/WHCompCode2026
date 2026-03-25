@@ -17,7 +17,7 @@ public class GroundHarvesterSubsystem extends SubsystemBase {
    }
   public void runGroundHarvest (){
     groundHarvest.set(-0.25);
-    isGroundHarvOn = .3;
+    isGroundHarvOn = -.25;
   }
 
   public void stopHarvest(){

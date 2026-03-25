@@ -39,7 +39,6 @@ public class ShooterSubsytem extends SubsystemBase {
    public void runCloserShooter(){
     shooter.set(-0.68);
     isShooterOn=0-.68;
-    
    }
 
 

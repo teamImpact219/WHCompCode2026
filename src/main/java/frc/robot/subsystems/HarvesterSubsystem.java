@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import javax.swing.*;
 
 public class HarvesterSubsystem extends SubsystemBase {
-  private final XboxController driveStick = new XboxController(0);
   private final SparkMax runDropHarvester  = new SparkMax(16, MotorType.kBrushless);
   //private final SparkMax dropHarvest = new SparkMax(17, MotorType.kBrushless);
   private final TalonFX dropHarvest  = new TalonFX(17);
@@ -53,11 +52,11 @@ public class HarvesterSubsystem extends SubsystemBase {
 
 
   public Command dropHarvestCMD(){
-    return runOnce(() -> lowerDropHarvest());
+    return runOnce( () -> lowerHarvesterCmd());
   };
 
   public Command raiseHarvestCmd(){
-    return runOnce(() -> raiseDropHarvest());
+    return runOnce(() -> raiseForDumpCmd());
   };
 
   public Command runHarvCmd(){
@@ -73,63 +72,123 @@ public class HarvesterSubsystem extends SubsystemBase {
 
   //negative is down and postive is up for harvester moving
 
-
-  public void raiseDropHarvest(){
-    double startTime = System.currentTimeMillis();
-    System.out.println(topSwitch.get());
 //pushed false
 //unpushed true
+ 
+  public Command raiseHarvesterCmd() {
+    return new Command() {
+      private long startTime;
 
-    if(!topSwitch.get()){
+      @Override
+      public void initialize() {
+        startTime = System.currentTimeMillis();
+      }
+
+      @Override
+      public void execute() {
+        if (topSwitch.get()) {
+
+          dropHarvest.set(.15);
+
+        }
         dropHarvest.set(0);
-
       }
-      while(topSwitch.get() && (System.currentTimeMillis()- startTime) < 2100){
-        dropHarvest.set(.25);
-        
+
+      @Override
+      public boolean isFinished() {
+        return !topSwitch.get() || (System.currentTimeMillis() - startTime) > 2400;
       }
-      dropHarvest.set(0);
 
-  }
-
-
-  public void raiseForDump(){
-    runDropHarvester.set(0);
-    runDropHarvester.set(-1);
-
-    
-    if(topSwitch.get())
-    {
-      dropHarvest.set(0.3);
-    }
-    else{
-      dropHarvest.set(0);
-    }
-
-  }
-
-
-
-  public void lowerDropHarvest(){
-    double startTime = System.currentTimeMillis();
-    System.out.println(botSwitch.get());
-    runDropHarvester.set(0);
-//pushed false
-//unpushed true
-
-    if(!botSwitch.get()){
+      @Override
+      public void end(boolean interupt) {
         dropHarvest.set(0);
+      }
 
+      @Override
+      public java.util.Set<edu.wpi.first.wpilibj2.command.Subsystem> getRequirements() {
+        return java.util.Set.of(HarvesterSubsystem.this);
       }
-      while(botSwitch.get() && (System.currentTimeMillis()- startTime) < 2200){
-        dropHarvest.set(-.3);
-        
+
+    };
+
+  }
+
+    public Command lowerHarvesterCmd() {
+    return new Command() {
+      private long startTime;
+
+      @Override
+      public void initialize() {
+        startTime = System.currentTimeMillis();
       }
-      dropHarvest.set(0);
+
+      @Override
+      public void execute() {
+        if (botSwitch.get()) {
+
+          dropHarvest.set(-.3);
+
+        }
+        dropHarvest.set(0);
+      }
+
+      @Override
+      public boolean isFinished() {
+        return !botSwitch.get() || (System.currentTimeMillis() - startTime) > 2200;
+      }
+
+      @Override
+      public void end(boolean interupt) {
+        dropHarvest.set(0);
+      }
+
+      @Override
+      public java.util.Set<edu.wpi.first.wpilibj2.command.Subsystem> getRequirements() {
+        return java.util.Set.of(HarvesterSubsystem.this);
+      }
+
+    };
 
   }
 
 
+  public Command raiseForDumpCmd() {
+    return new Command() {
+      private long startTime;
+
+      @Override
+      public void initialize() {
+        startTime = System.currentTimeMillis();
+      }
+
+      @Override
+      public void execute() {
+        if (botSwitch.get()) {
+
+          dropHarvest.set(-.3);
+
+        }
+        dropHarvest.set(0);
+      }
+
+      @Override
+      public boolean isFinished() {
+        return !botSwitch.get() || (System.currentTimeMillis() - startTime) > 1400;
+      }
+
+      @Override
+      public void end(boolean interupt) {
+        dropHarvest.set(0);
+      }
+
+      @Override
+      public java.util.Set<edu.wpi.first.wpilibj2.command.Subsystem> getRequirements() {
+        return java.util.Set.of(HarvesterSubsystem.this);
+      }
+
+    };
+
+  }
 
   /** Creates a new ShooterSubsytem. */
   public HarvesterSubsystem() {}

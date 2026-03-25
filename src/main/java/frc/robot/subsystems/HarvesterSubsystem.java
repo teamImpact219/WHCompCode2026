@@ -99,7 +99,7 @@ public class HarvesterSubsystem extends SubsystemBase {
 
       @Override
       public boolean isFinished() {
-        return !topSwitch.get() || (System.currentTimeMillis() - startTime) > 2400;
+        return !topSwitch.get() || (System.currentTimeMillis() - startTime) > 3000;
       }
 
       @Override
@@ -167,24 +167,27 @@ public class HarvesterSubsystem extends SubsystemBase {
 
         @Override
         public void execute() {
-          if (botSwitch.get()) {
+          if (topSwitch.get()) {
 
-            dropHarvest.set(-.3);
+            dropHarvest.set(.3);
+            runDropHarvester.set(-1);
 
           } else {
             dropHarvest.set(0);
+            runDropHarvester.set(0);
           }
 
         }
 
         @Override
         public boolean isFinished() {
-          return !botSwitch.get() || (System.currentTimeMillis() - startTime) > 1400;
+          return !topSwitch.get() || (System.currentTimeMillis() - startTime) > 1400;
         }
 
         @Override
         public void end(boolean interupt) {
           dropHarvest.set(0);
+          runDropHarvester.set(0);
         }
 
         @Override

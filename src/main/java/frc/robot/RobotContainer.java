@@ -80,11 +80,11 @@ public class RobotContainer extends SubsystemBase{
 
     private final CommandXboxController driverController = new CommandXboxController(0);
     //VISION STUFF
-    //update the cameras position
-    //trun to (button b) goes wtih co driver controller 
-    public final UniCamVisionSubsystem vision = new UniCamVisionSubsystem(VisionConstants.kCamName, VisionConstants.kRobotToCam);
-    public final uniCamTurnToTagCommand turnToCommand = new uniCamTurnToTagCommand(new int[]{9, 10, 25, 26}, vision, drivetrain, drive);
-    public final uniCamSuggestVisionEstimationCommand visionEstimation = new uniCamSuggestVisionEstimationCommand(drivetrain, vision);
+    public final UniCamVisionSubsystem frontVision = new UniCamVisionSubsystem(VisionConstants.kFrontCamName, VisionConstants.kFrontRobotToCam);
+    public final UniCamVisionSubsystem sideVision  = new UniCamVisionSubsystem(VisionConstants.kSideCamName,  VisionConstants.kSideRobotToCam);
+    public final uniCamTurnToTagCommand turnToCommand = new uniCamTurnToTagCommand(new int[]{9, 10, 25, 26}, frontVision, drivetrain, drive);
+    public final uniCamSuggestVisionEstimationCommand frontVisionEstimation = new uniCamSuggestVisionEstimationCommand(drivetrain, frontVision);
+    public final uniCamSuggestVisionEstimationCommand sideVisionEstimation  = new uniCamSuggestVisionEstimationCommand(drivetrain, sideVision);
 
 
 
@@ -144,8 +144,9 @@ public class RobotContainer extends SubsystemBase{
 
     private void configureBindings() {
         //vision stuff
-                //constantly contributes position estimations from vision subsystem
-                vision.setDefaultCommand(visionEstimation);
+                //constantly contributes position estimations from both cameras
+                frontVision.setDefaultCommand(frontVisionEstimation);
+                sideVision.setDefaultCommand(sideVisionEstimation);
                 bindVisionController();
         // buttons we made
         bindJoystickX();

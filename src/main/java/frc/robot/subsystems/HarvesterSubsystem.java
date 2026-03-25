@@ -83,9 +83,11 @@ public class HarvesterSubsystem extends SubsystemBase {
     if(!topSwitch.get()){
         dropHarvest.set(0);
 
-      }
-      while(topSwitch.get() && (System.currentTimeMillis()- startTime) < 2100){
-        dropHarvest.set(.25);
+      } 
+
+      while(topSwitch.get() && (System.currentTimeMillis() - startTime) <3800 ){
+
+        dropHarvest.set(.15);
         
       }
       dropHarvest.set(0);
@@ -94,18 +96,14 @@ public class HarvesterSubsystem extends SubsystemBase {
 
 
   public void raiseForDump(){
+    double startDumpTime = System.currentTimeMillis();
+    while((System.currentTimeMillis() - startDumpTime)< 1400)
+    {
+      dropHarvest.set(0.30);
+    }
+    dropHarvest.set(0);
     runDropHarvester.set(0);
     runDropHarvester.set(-1);
-
-    
-    if(topSwitch.get())
-    {
-      dropHarvest.set(0.3);
-    }
-    else{
-      dropHarvest.set(0);
-    }
-
   }
 
 
@@ -123,7 +121,6 @@ public class HarvesterSubsystem extends SubsystemBase {
       }
       while(botSwitch.get() && (System.currentTimeMillis()- startTime) < 2200){
         dropHarvest.set(-.3);
-        
       }
       dropHarvest.set(0);
 

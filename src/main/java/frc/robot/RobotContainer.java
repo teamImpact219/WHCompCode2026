@@ -137,8 +137,7 @@ public class RobotContainer extends SubsystemBase{
     private void configureBindings() {
         // buttons we made
         bindJoystickX();
-        bindJoysticky();
-        
+        bindJoysticky();  
         bindJoystickA();
         bindJoystickb();
         bindRightBumper();
@@ -198,18 +197,17 @@ public class RobotContainer extends SubsystemBase{
         // Left D-pad: boost to 2x base speed
         driverController.povLeft().onTrue(
             Commands.runOnce(() -> {
-                MaxSpeed[0] = BASE_SPEED * 2.0;
+                MaxSpeed[0] = BASE_SPEED * 1.5;
                 SmartDashboard.putNumber("MaxSpeed", MaxSpeed[0]);
                 System.out.println("LEFT D-PAD PRESSED — BOOST ACTIVATED");
                 System.out.println("Base Speed:    " + BASE_SPEED + " m/s");
                 System.out.println("Current Speed: " + MaxSpeed[0] + " m/s  (2x)");
             })
         );
+        codriverController.povLeft().toggleOnTrue((harv.startEnd(
+        () -> harv.raiseDropHarvest(),
+        () -> harv.stopMoving())));
 
-
-
-
-       
     }
  
     private void bindDownDPad() {
@@ -238,33 +236,42 @@ public class RobotContainer extends SubsystemBase{
                 ));
 
         // toggle ground harvest on and off with the press of a button
-        driverController.a().toggleOnTrue(
-                harv.startEnd(
-                        () -> harv.runDropHarvest(),
-                        () -> harv.stopDropHarvest()));
+        // driverController.a().toggleOnTrue(
+        //         harv.startEnd(
+        //                 () -> harv.runDropHarvest(),
+        //                 () -> harv.stopDropHarvest()));
         
-        driverController.a().toggleOnTrue(
-                groundHarv.startEnd(
-                        () -> groundHarv.runGroundHarvest(), // Start action
-                        () -> groundHarv.stopHarvest() // End action
-                ));
+        // driverController.a().toggleOnTrue(
+        //         groundHarv.startEnd(
+        //                 () -> groundHarv.runGroundHarvest(), // Start action
+        //                 () -> groundHarv.stopHarvest() // End action
+        //         ));
+
+        // driverController.a().toggleOnTrue(
+        //         trigger.startEnd(
+        //                 () -> trigger.runAgitatorCmd(), // Start action
+        //                 () -> trigger.stopAgitatorCmd() // End action
+        //         ));
 
         driverController.a().toggleOnTrue(
-                trigger.startEnd(
-                        () -> trigger.runAgitatorCmd(), // Start action
-                        () -> trigger.stopAgitatorCmd() // End action
-                ));
+    Commands.parallel(
+        harv.startEnd(
+            () -> harv.runDropHarvest(),
+            () -> harv.stopDropHarvest()),
+        groundHarv.startEnd(
+            () -> groundHarv.runGroundHarvest(),
+            () -> groundHarv.stopHarvest()),
+        trigger.startEnd(
+            () -> trigger.runAgitatorCmd(),
+            () -> trigger.stopAgitatorCmd())
+    )
+);
     }
 
      private void bindJoysticky() {
         codriverController.y().toggleOnTrue((harv.startEnd(
         () -> harv.raiseForDump(),
         () -> harv.stopMoving())));
-
-        //UNCOMMENT THIS AND DEPLOY TO RAISE DROP HARVESTER INTO FRAME BEFORE MATCHES
-        // codriverController.y().toggleOnTrue((harv.startEnd(
-        // () -> harv.raiseDropharvest(),
-        // () -> harv.stopMoving())));
 
     }
 
@@ -287,9 +294,6 @@ public class RobotContainer extends SubsystemBase{
         codriverController.b().toggleOnTrue((harv.startEnd(
         () -> harv.lowerDropHarvest(),
         () -> harv.stopMoving())));
-
-       
-
     }
 
 

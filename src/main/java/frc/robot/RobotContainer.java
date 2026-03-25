@@ -83,6 +83,12 @@ public class RobotContainer extends SubsystemBase{
     //VISION STUFF
     //update the cameras position
     //trun to (button b) goes wtih co driver controller 
+    // TODO: Verify camera name matches the name configured in the PhotonVision UI on the Orange Pi.
+    //       Current value "ACER_HD_User_Facing" may be wrong — check via the PhotonVision dashboard.
+    // TODO: Replace new Transform3d() with the measured camera-to-robot-center offset.
+    //       Transform3d args: Translation3d(x, y, z) in meters, Rotation3d(roll, pitch, yaw) in radians.
+    //       x = forward from robot center, y = left from robot center, z = up from robot center.
+    //       Measure from the robot's center of rotation to the camera lens.
     public final UniCamVisionSubsystem vision = new UniCamVisionSubsystem("ACER_HD_User_Facing", new Transform3d());
     public final uniCamTurnToTagCommand turnToCommand = new uniCamTurnToTagCommand(new int[]{9, 10, 25, 26}, vision, drivetrain, drive);
     public final uniCamSuggestVisionEstimationCommand visionEstimation = new uniCamSuggestVisionEstimationCommand(drivetrain, vision);

@@ -163,6 +163,8 @@
     .badge-lb, .badge-rb { background: #7b1fa2; }
     .badge-axis { background: #546e7a; font-size: 9px; }
     .badge-combo { background: #5d4037; font-size: 9px; }
+    .badge-dpad  { background: #00796b; font-size: 9px; }
+    .btn-dpad    { border-color: #00796b; }
 
     /* ── DESCRIPTION TEXT ── */
     .desc {
@@ -312,19 +314,40 @@
       <div class="binding btn-a">
         <div class="btn-badge badge-a">A</div>
         <div class="desc">
-          <strong>Drop Harvester &amp; Agitator</strong>
-          <small>Runs drop harvester roller + agitator simultaneously</small>
+          <strong>Drop Harvester, Ground Harvester &amp; Agitator</strong>
+          <small>Runs drop harvester + ground intake + agitator simultaneously</small>
         </div>
         <span class="tag tag-toggle">TOGGLE</span>
       </div>
 
-      <div class="binding btn-x">
-        <div class="btn-badge badge-x">X</div>
+      <div class="binding btn-b">
+        <div class="btn-badge badge-b">B</div>
         <div class="desc">
-          <strong>Ground Harvester &amp; Agitator</strong>
-          <small>Runs ground intake roller + agitator simultaneously</small>
+          <strong>Vision — Face Hub Tag</strong>
+          <small>Auto-rotates to aim at nearest hub AprilTag (tags 9, 10, 25, 26)</small>
         </div>
-        <span class="tag tag-toggle">TOGGLE</span>
+        <span class="tag tag-hold">HOLD</span>
+      </div>
+
+      <!-- SPEED CONTROL -->
+      <div class="section-label">Speed Control</div>
+
+      <div class="binding btn-dpad">
+        <div class="btn-badge badge-dpad">D-PAD<br>LEFT</div>
+        <div class="desc">
+          <strong>Speed Boost</strong>
+          <small>Sets drive speed to 1.5× base (press once)</small>
+        </div>
+        <span class="tag tag-instant">INSTANT</span>
+      </div>
+
+      <div class="binding btn-dpad">
+        <div class="btn-badge badge-dpad">D-PAD<br>DOWN</div>
+        <div class="desc">
+          <strong>Reset to Normal Speed</strong>
+          <small>Returns drive speed to base (press once)</small>
+        </div>
+        <span class="tag tag-instant">INSTANT</span>
       </div>
 
       <!-- SYS ID (hidden/dev) -->
@@ -399,6 +422,15 @@
         <span class="tag tag-toggle">TOGGLE</span>
       </div>
 
+      <div class="binding btn-lb">
+        <div class="btn-badge badge-lb">LB</div>
+        <div class="desc">
+          <strong>Closer Shot</strong>
+          <small>Shooter at close-range power &nbsp;·&nbsp; shortest distance</small>
+        </div>
+        <span class="tag tag-toggle">TOGGLE</span>
+      </div>
+
       <div class="binding btn-a">
         <div class="btn-badge badge-a">A</div>
         <div class="desc">
@@ -414,19 +446,28 @@
       <div class="binding btn-y">
         <div class="btn-badge badge-y">Y</div>
         <div class="desc">
-          <strong>Raise Drop Harvester</strong>
-          <small>Lifts harvester to stow position &nbsp;·&nbsp; auto-stops at top limit switch</small>
+          <strong>Raise Drop Harvester (for dump)</strong>
+          <small>Lifts harvester to dump/stow position &nbsp;·&nbsp; auto-stops at limit switch</small>
         </div>
-        <span class="tag tag-toggle">TOGGLE</span>
+        <span class="tag tag-instant">INSTANT</span>
       </div>
 
       <div class="binding btn-b">
         <div class="btn-badge badge-b">B</div>
         <div class="desc">
           <strong>Lower Drop Harvester</strong>
-          <small>Drops harvester to deploy position &nbsp;·&nbsp; auto-stops at bottom limit switch</small>
+          <small>Drops harvester to deploy position &nbsp;·&nbsp; auto-stops at limit switch</small>
         </div>
-        <span class="tag tag-toggle">TOGGLE</span>
+        <span class="tag tag-instant">INSTANT</span>
+      </div>
+
+      <div class="binding btn-dpad">
+        <div class="btn-badge badge-dpad">D-PAD<br>LEFT</div>
+        <div class="desc">
+          <strong>Raise Harvester</strong>
+          <small>Alternate raise command (stow position)</small>
+        </div>
+        <span class="tag tag-instant">INSTANT</span>
       </div>
 
       <!-- BLANK SPACE TO BALANCE LAYOUT -->
@@ -437,7 +478,7 @@
         <div style="font-size:11px; font-weight:bold; color:#e65100; margin-bottom:6px; text-transform:uppercase; letter-spacing:1px;">Shooting Workflow</div>
         <div style="font-size:11px; color:#333; line-height:1.8;">
           <span style="background:#ff9800; color:white; border-radius:3px; padding:1px 5px; font-weight:bold; font-size:10px;">1</span>
-          &nbsp;Spin up shooter &nbsp;<b>[X]</b> or <b>[RB]</b><br>
+          &nbsp;Spin up shooter &nbsp;<b>[X]</b>, <b>[RB]</b>, or <b>[LB]</b><br>
           <span style="background:#ff9800; color:white; border-radius:3px; padding:1px 5px; font-weight:bold; font-size:10px;">2</span>
           &nbsp;Confirm shooter speed is ready<br>
           <span style="background:#ff9800; color:white; border-radius:3px; padding:1px 5px; font-weight:bold; font-size:10px;">3</span>

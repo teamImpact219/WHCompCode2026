@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Team 219 — Driver Station Reference</title>
+  <style>
+    /* === OUTER SHELL === */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 100vw; height: 100vh;
+      overflow: hidden;
+      background: #070a12;
+      font-family: Arial, sans-serif;
+    }
+
+    .shell {
+      width: 100vw; height: 100vh;
+      display: flex; flex-direction: column;
+    }
+
+    .top-strip {
+      flex-shrink: 0;
+      height: 34px;
+      background: linear-gradient(135deg, #0b1730 0%, #1e0600 100%);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      display: flex; align-items: center; justify-content: center; gap: 20px;
+    }
+    .top-strip .team-badge {
+      background: linear-gradient(90deg, #0d47a1, #7b1500);
+      color: white; font-size: 11px; font-weight: 900;
+      letter-spacing: 4px; text-transform: uppercase;
+      padding: 3px 16px; border-radius: 3px;
+    }
+    .top-strip .tagline {
+      color: rgba(255,255,255,0.35);
+      font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase;
+    }
+
+    .pages-area {
+      flex: 1;
+      display: flex; align-items: center;
+      gap: 0; padding: 10px 10px;
+      overflow: hidden;
+    }
+
+    .panel-wrapper {
+      flex: 1; height: 100%;
+      position: relative; overflow: hidden;
+    }
+
+    .panel-sep {
+      flex-shrink: 0; width: 20px; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .panel-sep::before {
+      content: '';
+      display: block; width: 1px; height: 55%;
+      background: linear-gradient(180deg, transparent, rgba(255,255,255,0.14) 30%, rgba(255,255,255,0.14) 70%, transparent);
+    }
+
+    .bottom-strip {
+      flex-shrink: 0; height: 22px;
+      background: rgba(255,255,255,0.02);
+      border-top: 1px solid rgba(255,255,255,0.05);
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    .bottom-strip span {
+      color: rgba(255,255,255,0.22);
+      font-size: 9px; letter-spacing: 1.8px; text-transform: uppercase;
+    }
+    .bottom-strip .sep { color: rgba(255,255,255,0.10); }
+
+    /* === PAGE STYLES === */
+    .page {
+      position: absolute;
+      width: 998px; height: 758px;
+      background: white;
+      display: flex; flex-direction: column;
+      overflow: hidden;
+      transform-origin: top left;
+      box-shadow: 0 12px 60px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.06);
+      border-radius: 3px;
+    }
+
+    .page-header {
+      display: flex; align-items: center;
+      padding: 0 24px; height: 64px;
+      flex-shrink: 0; gap: 16px;
+    }
+    .driver-hdr   { background: #0d47a1; }
+    .operator-hdr { background: #7b1500; }
+
+    .page-header h1 {
+      font-size: 30px; letter-spacing: 5px;
+      text-transform: uppercase; color: white;
+    }
+    .hdr-port {
+      font-size: 13px; color: rgba(255,255,255,0.65);
+      letter-spacing: 2px;
+      border: 1px solid rgba(255,255,255,0.35);
+      padding: 3px 10px; border-radius: 4px; margin-left: auto;
+    }
+    .hdr-team {
+      font-size: 12px; color: rgba(255,255,255,0.55); letter-spacing: 1px;
+    }
+
+    .page-body { flex: 1; display: flex; overflow: hidden; }
+
+    .ctrl-col {
+      flex: 0 0 58%;
+      display: flex; align-items: center; justify-content: center;
+      padding: 6px 0 6px 6px;
+      border-right: 2px solid #eee; background: #f9f9f9;
+    }
+
+    .bindings-col {
+      flex: 1; display: flex; flex-direction: column;
+      justify-content: center; gap: 7px; padding: 12px 16px;
+    }
+
+    .section-lbl {
+      font-size: 10px; font-weight: bold;
+      text-transform: uppercase; letter-spacing: 2px; color: #999;
+      border-bottom: 1px solid #ddd; padding-bottom: 2px; margin-bottom: 2px;
+    }
+
+    .binding {
+      display: flex; align-items: center; gap: 10px;
+      padding: 7px 10px; border-radius: 7px;
+      background: #f7f7f7; border-left: 6px solid #ccc;
+    }
+
+    .bb {
+      flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+      color: white; font-weight: 900; border: 3px solid rgba(0,0,0,0.18);
+    }
+    .bb-round { border-radius: 50%; width: 46px; height: 46px; font-size: 20px; }
+    .bb-pill  { border-radius: 8px; height: 38px; min-width: 60px; padding: 0 12px; font-size: 14px; }
+
+    .bg-a  { background: #2e7d32; } .bl-a  { border-color: #2e7d32; }
+    .bg-b  { background: #b71c1c; } .bl-b  { border-color: #b71c1c; }
+    .bg-x  { background: #1565c0; } .bl-x  { border-color: #1565c0; }
+    .bg-y  { background: #e65100; } .bl-y  { border-color: #e65100; }
+    .bg-lb { background: #6a1b9a; } .bl-lb { border-color: #6a1b9a; }
+    .bg-rb { background: #6a1b9a; } .bl-rb { border-color: #6a1b9a; }
+    .bg-ax   { background: #37474f; } .bl-ax   { border-color: #37474f; }
+    .bg-dpad { background: #f57f17; } .bl-dpad { border-color: #f57f17; }
+
+    .desc { flex: 1; }
+    .desc .act { font-size: 20px; font-weight: 900; color: #111; line-height: 1.1; }
+    .desc .det { font-size: 11px; color: #666; margin-top: 2px; }
+
+    .tag {
+      font-size: 10px; font-weight: bold;
+      padding: 2px 7px; border-radius: 4px; flex-shrink: 0;
+    }
+    .tag-toggle  { background: #ede7f6; color: #512da8; }
+    .tag-instant { background: #e3f2fd; color: #1565c0; }
+    .tag-hold    { background: #fff3e0; color: #e65100; }
+
+    .page-footer {
+      height: 26px; background: #111; color: #777;
+      font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .page-footer span { color: #e94560; margin: 0 4px; }
+
+    /* === PRINT FALLBACK (original two-page format) === */
+    @media print {
+      @page { size: letter landscape; margin: 0.3in; }
+      html, body { background: white; width: auto; height: auto; overflow: visible; }
+      .shell { display: block; }
+      .top-strip, .bottom-strip, .panel-sep { display: none; }
+      .pages-area { display: block; padding: 0; }
+      .panel-wrapper { height: auto; position: static; }
+      .page {
+        position: static !important;
+        transform: none !important;
+        width: 10.4in; height: 7.9in;
+        box-shadow: none; border-radius: 0;
+        page-break-after: always;
+      }
+      .page:last-of-type { page-break-after: auto; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- TOP BANNER -->
+  <div class="top-strip">
+    <span class="team-badge">Team 219</span>
+    <span class="tagline">Warren Hills &nbsp;·&nbsp; WHCompCode2026 &nbsp;·&nbsp; 2026 Season &nbsp;·&nbsp; REBUILT</span>
+  </div>
+
+  <!-- TWO-PAGE AREA -->
+  <div class="pages-area">
+
+    <!-- PANEL: DRIVER -->
+    <div class="panel-wrapper" id="panel-0">
+      <div class="page" id="page-0">
+
+        <div class="page-header driver-hdr">
+          <h1>&#127918; Driver Controller</h1>
+          <div class="hdr-team">Team 219 &mdash; Warren Hills &nbsp;&#xB7;&nbsp; 2026</div>
+          <div class="hdr-port">USB Port 0</div>
+        </div>
+
+        <div class="page-body">
+          <div class="ctrl-col">
+            <svg viewBox="0 0 744 500" width="100%" style="max-height:100%;" xmlns="http://www.w3.org/2000/svg">
+              <image href="Xbox_Controller.svg" x="0" y="0" width="744" height="500"/>
+
+              <!-- LEFT BUMPER (reset heading) -->
+              <rect x="152" y="97" width="112" height="28" rx="10"
+                    fill="#9c27b0" fill-opacity="0.35"
+                    stroke="#e040fb" stroke-width="3" stroke-opacity="0.9"/>
+              <line x1="188" y1="97" x2="188" y2="68" stroke="#e040fb" stroke-width="2" stroke-dasharray="5,3"/>
+              <rect x="100" y="38" width="178" height="30" rx="6" fill="#4a148c" fill-opacity="0.92"/>
+              <text x="189" y="50" text-anchor="middle" fill="white" font-size="13" font-family="Arial" font-weight="bold">LB &#8212; RESET HEADING</text>
+              <text x="189" y="63" text-anchor="middle" fill="#ce93d8" font-size="10" font-family="Arial">Re-zeros forward direction</text>
+
+              <!-- LEFT STICK (drive) -->
+              <circle cx="371" cy="247" r="42"
+                      fill="#1565c0" fill-opacity="0.3"
+                      stroke="#42a5f5" stroke-width="4" stroke-opacity="0.9"/>
+              <rect x="294" y="302" width="154" height="40" rx="6" fill="#0d47a1" fill-opacity="0.88"/>
+              <text x="371" y="317" text-anchor="middle" fill="white" font-size="14" font-family="Arial" font-weight="bold">LEFT STICK &#8212; DRIVE</text>
+              <text x="371" y="333" text-anchor="middle" fill="#90caf9" font-size="10" font-family="Arial">Y-axis: Fwd/Back &#xB7; X-axis: Strafe L/R</text>
+              <line x1="371" y1="289" x2="371" y2="302" stroke="#42a5f5" stroke-width="2" stroke-dasharray="4,3"/>
+
+              <!-- RIGHT STICK (rotate) -->
+              <circle cx="467" cy="353" r="42"
+                      fill="#37474f" fill-opacity="0.3"
+                      stroke="#90a4ae" stroke-width="4" stroke-opacity="0.9"/>
+              <rect x="394" y="408" width="146" height="30" rx="6" fill="#263238" fill-opacity="0.88"/>
+              <text x="467" y="420" text-anchor="middle" fill="white" font-size="13" font-family="Arial" font-weight="bold">R-STICK X &#8212; ROTATE</text>
+              <text x="467" y="432" text-anchor="middle" fill="#90a4ae" font-size="10" font-family="Arial">Field-centric yaw</text>
+              <line x1="467" y1="395" x2="467" y2="408" stroke="#90a4ae" stroke-width="2" stroke-dasharray="4,3"/>
+
+              <!-- A BUTTON (harvest) -->
+              <circle cx="572" cy="293" r="26"
+                      fill="#2e7d32" fill-opacity="0.45"
+                      stroke="#66bb6a" stroke-width="4" stroke-opacity="0.95"/>
+              <line x1="598" y1="293" x2="636" y2="293" stroke="#66bb6a" stroke-width="2" stroke-dasharray="4,3"/>
+              <rect x="636" y="274" width="105" height="38" rx="5" fill="#1b5e20" fill-opacity="0.92"/>
+              <text x="688" y="289" text-anchor="middle" fill="white" font-size="12" font-family="Arial" font-weight="bold">A &#8212; ALL HARVEST</text>
+              <text x="688" y="303" text-anchor="middle" fill="#a5d6a7" font-size="10" font-family="Arial">Drop + Ground + Agit (toggle)</text>
+
+              <!-- B BUTTON (face hub) -->
+              <circle cx="627" cy="246" r="26"
+                      fill="#b71c1c" fill-opacity="0.45"
+                      stroke="#ef9a9a" stroke-width="4" stroke-opacity="0.95"/>
+              <line x1="653" y1="246" x2="686" y2="222" stroke="#ef9a9a" stroke-width="2" stroke-dasharray="4,3"/>
+              <rect x="636" y="202" width="105" height="38" rx="5" fill="#b71c1c" fill-opacity="0.92"/>
+              <text x="688" y="217" text-anchor="middle" fill="white" font-size="12" font-family="Arial" font-weight="bold">B &#8212; FACE HUB</text>
+              <text x="688" y="231" text-anchor="middle" fill="#ffcdd2" font-size="10" font-family="Arial">Auto-aim (hold)</text>
+
+              <!-- D-PAD LEFT (speed boost) -->
+              <rect x="253" y="347" width="24" height="16" rx="4"
+                    fill="#f57f17" fill-opacity="0.45"
+                    stroke="#f57f17" stroke-width="2.5" stroke-opacity="0.95"/>
+              <line x1="263" y1="363" x2="90" y2="418" stroke="#f57f17" stroke-width="2" stroke-dasharray="4,3"/>
+              <rect x="4" y="413" width="175" height="30" rx="5" fill="#e65100" fill-opacity="0.90"/>
+              <text x="91" y="426" text-anchor="middle" fill="white" font-size="12" font-family="Arial" font-weight="bold">D-LEFT &#8212; SPEED BOOST</text>
+              <text x="91" y="439" text-anchor="middle" fill="#ffcc80" font-size="10" font-family="Arial">1.5&#xD7; base speed (50% &#8594; 75% max)</text>
+
+              <!-- D-PAD DOWN (speed reset) -->
+              <rect x="284" y="364" width="16" height="24" rx="4"
+                    fill="#2e7d32" fill-opacity="0.45"
+                    stroke="#4caf50" stroke-width="2.5" stroke-opacity="0.95"/>
+              <line x1="292" y1="388" x2="100" y2="453" stroke="#4caf50" stroke-width="2" stroke-dasharray="4,3"/>
+              <rect x="4" y="448" width="175" height="30" rx="5" fill="#1b5e20" fill-opacity="0.90"/>
+              <text x="91" y="461" text-anchor="middle" fill="white" font-size="12" font-family="Arial" font-weight="bold">D-DOWN &#8212; RESET SPEED</text>
+              <text x="91" y="474" text-anchor="middle" fill="#a5d6a7" font-size="10" font-family="Arial">Back to 50% base speed</text>
+
+              <!-- Max speed note -->
+              <rect x="4" y="4" width="142" height="30" rx="5" fill="#f9a825" fill-opacity="0.9"/>
+              <text x="75" y="16" text-anchor="middle" fill="#111" font-size="10" font-family="Arial" font-weight="bold">MAX SPEED: 50%</text>
+              <text x="75" y="28" text-anchor="middle" fill="#333" font-size="9" font-family="Arial">Rotation: 0.75 rot/sec &#xB7; Deadband: 20%</text>
+            </svg>
+          </div>
+
+          <div class="bindings-col">
+            <div class="section-lbl">Drivetrain &mdash; Field-Centric Swerve</div>
+
+            <div class="binding bl-ax">
+              <div class="bb bb-pill bg-ax">L-STK</div>
+              <div class="desc">
+                <div class="act">Forward / Back &amp; Strafe</div>
+                <div class="det">Y-axis = forward/back &nbsp;&nbsp;X-axis = left/right strafe &nbsp;&nbsp;Squared response, 20% deadband</div>
+              </div>
+            </div>
+
+            <div class="binding bl-ax">
+              <div class="bb bb-pill bg-ax" style="font-size:12px;">R-STK X</div>
+              <div class="desc">
+                <div class="act">Rotate Robot</div>
+                <div class="det">Right stick left/right &nbsp;&nbsp;Field-centric — relative to field, not robot nose</div>
+              </div>
+            </div>
+
+            <div class="binding bl-lb">
+              <div class="bb bb-pill bg-lb">LB</div>
+              <div class="desc">
+                <div class="act">Reset Field-Centric Heading</div>
+                <div class="det">Press if drive direction feels wrong &nbsp;&nbsp;Re-zeros forward to current robot facing</div>
+              </div>
+              <span class="tag tag-instant">INSTANT</span>
+            </div>
+
+            <div class="section-lbl" style="margin-top:6px;">Mechanism Controls</div>
+
+            <div class="binding bl-a">
+              <div class="bb bb-round bg-a">A</div>
+              <div class="desc">
+                <div class="act">Drop + Ground Harvest + Agitator</div>
+                <div class="det">Runs all three intake mechanisms simultaneously &nbsp;&nbsp;Press again to stop all</div>
+              </div>
+              <span class="tag tag-toggle">TOGGLE</span>
+            </div>
+
+            <div class="binding bl-b">
+              <div class="bb bb-round bg-b">B</div>
+              <div class="desc">
+                <div class="act">Face Hub</div>
+                <div class="det">Rotates robot to aim at scoring hub using vision &nbsp;&nbsp;Release to resume manual rotation</div>
+              </div>
+              <span class="tag tag-hold">HOLD</span>
+            </div>
+
+            <div class="section-lbl" style="margin-top:6px;">Speed Control &mdash; D-Pad</div>
+
+            <div class="binding bl-dpad">
+              <div class="bb bb-pill bg-dpad">D &#9664;</div>
+              <div class="desc">
+                <div class="act">Speed Boost</div>
+                <div class="det">Sets drive to 1.5&times; base speed (50% &rarr; 75% max) &nbsp;&nbsp;Use for fast repositioning</div>
+              </div>
+              <span class="tag tag-instant">INSTANT</span>
+            </div>
+
+            <div class="binding bl-dpad">
+              <div class="bb bb-pill bg-dpad">D &#9660;</div>
+              <div class="desc">
+                <div class="act">Reset Speed</div>
+                <div class="det">Returns to 50% base speed &nbsp;&nbsp;Use for precise control</div>
+              </div>
+              <span class="tag tag-instant">INSTANT</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="page-footer">
+          <span>Team 219</span> Warren Hills &nbsp;&#xB7;&nbsp; WHCompCode2026 &nbsp;&#xB7;&nbsp; Driver Reference
+        </div>
+      </div><!-- /page -->
+    </div><!-- /panel-0 -->
+
+    <div class="panel-sep"></div>
+
+    <!-- PANEL: OPERATOR -->
+    <div class="panel-wrapper" id="panel-1">
+      <div class="page" id="page-1">
+
+        <div class="page-header operator-hdr">
+          <h1>&#9881;&#65039; Operator Controller</h1>
+          <div class="hdr-team">Team 219 &mdash; Warren Hills &nbsp;&#xB7;&nbsp; 2026</div>
+          <div class="hdr-port">USB Port 1</div>
+        </div>
+
+        <div class="page-body">
+          <div class="ctrl-col">
+            <svg viewBox="0 0 744 500" width="100%" style="max-height:100%;" xmlns="http://www.w3.org/2000/svg">
+              <image href="Xbox_Controller.svg" x="0" y="0" width="744" height="500"/>
+
+              <!-- LEFT BUMPER (closer shot) -->
+              <rect x="152" y="97" width="112" height="28" rx="10"
+                    fill="#6a1b9a" fill-opacity="0.35"
+                    stroke="#ce93d8" stroke-width="3" stroke-opacity="0.9"/>
+              <line x1="207" y1="97" x2="246" y2="68" stroke="#ce93d8" stroke-width="2" stroke-dasharray="5,3"/>
+              <rect x="164" y="38" width="165" height="30" rx="6" fill="#4a148c" fill-opacity="0.92"/>
+              <text x="246" y="50" text-anchor="middle" fill="white" font-size="13" font-family="Arial" font-weight="bold">LB &#8212; CLOSER SHOT</text>
+              <text x="246" y="63" text-anchor="middle" fill="#ce93d8" font-size="10" font-family="Arial">Shooter 68% power (toggle)</text>
+
+              <!-- RIGHT BUMPER (long shot) -->
+              <rect x="500" y="97" width="118" height="28" rx="10"
+                    fill="#6a1b9a" fill-opacity="0.40"
+                    stroke="#ce93d8" stroke-width="3" stroke-opacity="0.95"/>
+              <line x1="559" y1="97" x2="559" y2="68" stroke="#ce93d8" stroke-width="2" stroke-dasharray="5,3"/>
+              <rect x="468" y="38" width="182" height="30" rx="6" fill="#4a148c" fill-opacity="0.92"/>
+              <text x="559" y="50" text-anchor="middle" fill="white" font-size="13" font-family="Arial" font-weight="bold">RB &#8212; LONG-RANGE SHOT</text>
+              <text x="559" y="63" text-anchor="middle" fill="#ce93d8" font-size="10" font-family="Arial">Shooter 100% power (toggle)</text>
+
+              <!-- Y BUTTON (raise harvester) -->
+              <circle cx="576" cy="208" r="26"
+                      fill="#e65100" fill-opacity="0.45"
+                      stroke="#ffcc02" stroke-width="4" stroke-opacity="0.95"/>
+              <line x1="550" y1="208" x2="510" y2="208" stroke="#ffcc02" stroke-width="2" stroke-dasharray="4,3"/>
+              <rect x="340" y="192" width="170" height="32" rx="5" fill="#bf360c" fill-opacity="0.90"/>
+              <text x="425" y="205" text-anchor="middle" fill="white" font-size="12" font-family="Arial" font-weight="bold">Y &#8212; RAISE HARVESTER</text>
+              <text x="425" y="218" text-anchor="middle" fill="#ffcc80" font-size="10" font-family="Arial">Raises to dump/scoring position</text>
+
+              <!-- X BUTTON (close shot) -->
+              <circle cx="519" cy="254" r="26"
+                      fill="#1565c0" fill-opacity="0.45"
+                      stroke="#42a5f5" stroke-width="4" stroke-opacity="0.95"/>
+              <line x1="493" y1="254" x2="460" y2="254" stroke="#42a5f5" stroke-width="2" stroke-dasharray="4,3"/>
+              <rect x="280" y="238" width="180" height="32" rx="5" fill="#0d47a1" fill-opacity="0.90"/>
+              <text x="370" y="251" text-anchor="middle" fill="white" font-size="12" font-family="Arial" font-weight="bold">X &#8212; CLOSE-RANGE SHOT</text>
+              <text x="370" y="265" text-anchor="middle" fill="#90caf9" font-size="10" font-family="Arial">Shooter 83% &#xB7; ~9 ft 5 in (toggle)</text>
+
+              <!-- B BUTTON (lower harvester) -->
+              <circle cx="627" cy="246" r="26"
+                      fill="#b71c1c" fill-opacity="0.45"
+                      stroke="#ef9a9a" stroke-width="4" stroke-opacity="0.95"/>
+              <line x1="645" y1="262" x2="665" y2="310" stroke="#ef9a9a" stroke-width="2" stroke-dasharray="4,3"/>
+              <rect x="558" y="310" width="183" height="32" rx="5" fill="#b71c1c" fill-opacity="0.90"/>
+              <text x="649" y="323" text-anchor="middle" fill="white" font-size="12" font-family="Arial" font-weight="bold">B &#8212; LOWER HARVESTER</text>
+              <text x="649" y="337" text-anchor="middle" fill="#ffcdd2" font-size="10" font-family="Arial">Auto-stops at bottom limit switch</text>
+
+              <!-- A BUTTON (trigger / feed) -->
+              <circle cx="572" cy="293" r="26"
+                      fill="#2e7d32" fill-opacity="0.45"
+                      stroke="#66bb6a" stroke-width="4" stroke-opacity="0.95"/>
+              <line x1="556" y1="312" x2="500" y2="358" stroke="#66bb6a" stroke-width="2" stroke-dasharray="4,3"/>
+              <rect x="348" y="358" width="152" height="32" rx="5" fill="#1b5e20" fill-opacity="0.90"/>
+              <text x="424" y="371" text-anchor="middle" fill="white" font-size="12" font-family="Arial" font-weight="bold">A &#8212; RUN TRIGGER</text>
+              <text x="424" y="385" text-anchor="middle" fill="#a5d6a7" font-size="10" font-family="Arial">Feed note into shooter (toggle)</text>
+
+              <!-- Shoot sequence box -->
+              <rect x="4" y="4" width="160" height="160" rx="8"
+                    fill="#fff8e1" fill-opacity="0.96" stroke="#f9a825" stroke-width="2"/>
+              <text x="84" y="20" text-anchor="middle" fill="#e65100" font-size="12" font-family="Arial" font-weight="bold">SHOOT SEQUENCE</text>
+              <circle cx="20" cy="40" r="9" fill="#e65100"/>
+              <text x="20" y="45" text-anchor="middle" fill="white" font-size="10" font-family="Arial" font-weight="bold">1</text>
+              <text x="36" y="37" fill="#333" font-size="11" font-family="Arial" font-weight="bold">Spin up shooter</text>
+              <text x="36" y="50" fill="#666" font-size="10" font-family="Arial">Press [X], [LB] or [RB]</text>
+              <circle cx="20" cy="72" r="9" fill="#e65100"/>
+              <text x="20" y="77" text-anchor="middle" fill="white" font-size="10" font-family="Arial" font-weight="bold">2</text>
+              <text x="36" y="69" fill="#333" font-size="11" font-family="Arial" font-weight="bold">Wait for speed</text>
+              <text x="36" y="82" fill="#666" font-size="10" font-family="Arial">Check SmartDashboard</text>
+              <circle cx="20" cy="104" r="9" fill="#e65100"/>
+              <text x="20" y="109" text-anchor="middle" fill="white" font-size="10" font-family="Arial" font-weight="bold">3</text>
+              <text x="36" y="101" fill="#333" font-size="11" font-family="Arial" font-weight="bold">Feed note</text>
+              <text x="36" y="114" fill="#666" font-size="10" font-family="Arial">Press [A] to run trigger</text>
+              <circle cx="20" cy="136" r="9" fill="#e65100"/>
+              <text x="20" y="141" text-anchor="middle" fill="white" font-size="10" font-family="Arial" font-weight="bold">4</text>
+              <text x="36" y="133" fill="#333" font-size="11" font-family="Arial" font-weight="bold">Toggle off after shot</text>
+              <text x="36" y="146" fill="#666" font-size="10" font-family="Arial">Press same button again</text>
+
+              <!-- Toggle reminder -->
+              <rect x="4" y="174" width="160" height="24" rx="5"
+                    fill="#ede7f6" fill-opacity="0.95" stroke="#9c27b0" stroke-width="1.5"/>
+              <text x="84" y="183" text-anchor="middle" fill="#4a148c" font-size="10" font-family="Arial" font-weight="bold">TOGGLE: X, LB, RB, A</text>
+              <text x="84" y="193" text-anchor="middle" fill="#7b1fa2" font-size="9" font-family="Arial">INSTANT (one press): Y, B, D-PAD</text>
+            </svg>
+          </div>
+
+          <div class="bindings-col">
+            <div class="section-lbl">Shooting</div>
+
+            <div class="binding bl-x">
+              <div class="bb bb-round bg-x">X</div>
+              <div class="desc">
+                <div class="act">Close-Range Shot</div>
+                <div class="det">Shooter at 83% power &nbsp;&nbsp;Tuned for ~9 ft 5 in &nbsp;&nbsp;Press again to stop</div>
+              </div>
+              <span class="tag tag-toggle">TOGGLE</span>
+            </div>
+
+            <div class="binding bl-lb">
+              <div class="bb bb-pill bg-lb">LB</div>
+              <div class="desc">
+                <div class="act">Closer Shot</div>
+                <div class="det">Shooter at 68% power &nbsp;&nbsp;Short-range / closer than X &nbsp;&nbsp;Press again to stop</div>
+              </div>
+              <span class="tag tag-toggle">TOGGLE</span>
+            </div>
+
+            <div class="binding bl-rb">
+              <div class="bb bb-pill bg-rb">RB</div>
+              <div class="desc">
+                <div class="act">Long-Range Shot</div>
+                <div class="det">Shooter at 100% power &nbsp;&nbsp;Maximum distance &nbsp;&nbsp;Press again to stop</div>
+              </div>
+              <span class="tag tag-toggle">TOGGLE</span>
+            </div>
+
+            <div class="binding bl-a">
+              <div class="bb bb-round bg-a">A</div>
+              <div class="desc">
+                <div class="act">Run Trigger &amp; Feed</div>
+                <div class="det">Feeds note into shooter &nbsp;&nbsp;Use AFTER spinning up shooter &nbsp;&nbsp;Press again to stop</div>
+              </div>
+              <span class="tag tag-toggle">TOGGLE</span>
+            </div>
+
+            <div class="section-lbl" style="margin-top:6px;">Harvester Position</div>
+
+            <div class="binding bl-y">
+              <div class="bb bb-round bg-y">Y</div>
+              <div class="desc">
+                <div class="act">Raise Drop Harvester</div>
+                <div class="det">Raises to dump/scoring position &nbsp;&nbsp;Stops at limit switch</div>
+              </div>
+              <span class="tag tag-instant">INSTANT</span>
+            </div>
+
+            <div class="binding bl-b">
+              <div class="bb bb-round bg-b">B</div>
+              <div class="desc">
+                <div class="act">Lower Drop Harvester</div>
+                <div class="det">Drops to deploy position &nbsp;&nbsp;Auto-stops at bottom limit switch</div>
+              </div>
+              <span class="tag tag-instant">INSTANT</span>
+            </div>
+
+            <div class="binding bl-dpad">
+              <div class="bb bb-pill bg-dpad">D &#9664;</div>
+              <div class="desc">
+                <div class="act">Raise Harvester</div>
+                <div class="det">Alternate raise to stow/travel position &nbsp;&nbsp;Stops at limit switch</div>
+              </div>
+              <span class="tag tag-instant">INSTANT</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="page-footer">
+          <span>Team 219</span> Warren Hills &nbsp;&#xB7;&nbsp; WHCompCode2026 &nbsp;&#xB7;&nbsp; Operator Reference &nbsp;&#xB7;&nbsp; Auto: <span>rightPlayer</span>
+        </div>
+      </div><!-- /page -->
+    </div><!-- /panel-1 -->
+
+  </div><!-- /pages-area -->
+
+  <!-- BOTTOM STRIP -->
+  <div class="bottom-strip">
+    <span>Driver</span>
+    <span class="sep">·</span>
+    <span>Port 0</span>
+    <span class="sep">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+    <span>Operator</span>
+    <span class="sep">·</span>
+    <span>Port 1</span>
+    <span class="sep">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+    <span>WHCompCode2026</span>
+  </div>
+
+</div><!-- /shell -->
+
+<script>
+  function scalePages() {
+    const panels = [
+      document.getElementById('panel-0'),
+      document.getElementById('panel-1')
+    ];
+    const pages = [
+      document.getElementById('page-0'),
+      document.getElementById('page-1')
+    ];
+    const PAGE_W = 998, PAGE_H = 758;
+    panels.forEach(function(panel, i) {
+      var pW = panel.offsetWidth;
+      var pH = panel.offsetHeight;
+      var scale = Math.min(pW / PAGE_W, pH / PAGE_H);
+      var scaledW = PAGE_W * scale;
+      var scaledH = PAGE_H * scale;
+      var left = (pW - scaledW) / 2;
+      var top  = (pH - scaledH) / 2;
+      pages[i].style.transform = 'scale(' + scale + ')';
+      pages[i].style.left = left + 'px';
+      pages[i].style.top  = top  + 'px';
+    });
+  }
+  window.addEventListener('load', scalePages);
+  window.addEventListener('resize', scalePages);
+</script>
+
+</body>
+</html>

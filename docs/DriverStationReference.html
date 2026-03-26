@@ -4,519 +4,556 @@
   <meta charset="UTF-8">
   <title>Team 219 Driver Station Reference</title>
   <style>
+    @page { size: letter landscape; margin: 0.3in; }
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: 'Arial', sans-serif;
-      background: #f0f0f0;
-      padding: 12px;
-      font-size: 13px;
+      font-family: 'Arial Black', 'Arial', sans-serif;
+      background: #ddd;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
     }
 
     @media print {
-      body { background: white; padding: 6px; font-size: 11px; }
-      .page { box-shadow: none; }
+      body { background: white; }
+      .page { box-shadow: none; margin: 0; page-break-after: always; }
+      .page:last-child { page-break-after: auto; }
     }
 
     .page {
+      width: 10.4in;
+      height: 7.9in;
       background: white;
-      max-width: 1000px;
-      margin: 0 auto;
-      border-radius: 10px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+      margin: 0 auto 30px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    }
+
+    /* HEADER */
+    .page-header {
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      height: 64px;
+      flex-shrink: 0;
+      gap: 16px;
+    }
+    .driver-hdr   { background: #0d47a1; }
+    .operator-hdr { background: #7b1500; }
+
+    .page-header h1 {
+      font-size: 30px;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: white;
+    }
+    .hdr-port {
+      font-family: Arial, sans-serif;
+      font-size: 13px;
+      color: rgba(255,255,255,0.65);
+      letter-spacing: 2px;
+      border: 1px solid rgba(255,255,255,0.35);
+      padding: 3px 10px;
+      border-radius: 4px;
+      margin-left: auto;
+    }
+    .hdr-team {
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      color: rgba(255,255,255,0.55);
+      letter-spacing: 1px;
+    }
+
+    /* BODY */
+    .page-body {
+      flex: 1;
+      display: flex;
       overflow: hidden;
     }
 
-    /* ── HEADER ── */
-    .header {
-      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
-      color: white;
-      text-align: center;
-      padding: 14px 20px 10px;
-      border-bottom: 4px solid #e94560;
-    }
-    .header h1 {
-      font-size: 24px;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: #e94560;
-    }
-    .header p {
-      font-size: 11px;
-      color: #aaa;
-      margin-top: 2px;
-      letter-spacing: 1px;
-    }
-    .team-num {
-      font-size: 14px;
-      color: #ccc;
-      font-weight: bold;
-      letter-spacing: 2px;
-    }
-
-    /* ── TWO-COLUMN LAYOUT ── */
-    .controllers {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0;
-    }
-
-    .controller-panel {
-      padding: 14px 16px;
-    }
-
-    .driver-panel {
-      background: #eaf4ff;
-      border-right: 3px solid #1565c0;
-    }
-
-    .operator-panel {
-      background: #fff3e0;
-    }
-
-    .panel-title {
-      font-size: 15px;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      padding: 8px 12px;
-      border-radius: 6px;
-      margin-bottom: 12px;
+    /* LEFT: CONTROLLER SVG */
+    .ctrl-col {
+      flex: 0 0 58%;
       display: flex;
       align-items: center;
-      gap: 8px;
+      justify-content: center;
+      padding: 6px 0 6px 6px;
+      border-right: 2px solid #eee;
+      background: #f9f9f9;
     }
 
-    .driver-title {
-      background: #1565c0;
-      color: white;
+    /* RIGHT: BINDINGS */
+    .bindings-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 7px;
+      padding: 12px 16px;
     }
 
-    .operator-title {
-      background: #e65100;
-      color: white;
-    }
-
-    .port-badge {
-      font-size: 10px;
-      background: rgba(255,255,255,0.25);
-      border-radius: 4px;
-      padding: 1px 6px;
-      font-weight: normal;
-      letter-spacing: 0;
-      margin-left: auto;
-    }
-
-    /* ── SECTION HEADERS ── */
-    .section-label {
+    .section-lbl {
+      font-family: Arial, sans-serif;
       font-size: 10px;
       font-weight: bold;
       text-transform: uppercase;
-      letter-spacing: 1.5px;
-      margin: 10px 0 5px;
+      letter-spacing: 2px;
+      color: #999;
+      border-bottom: 1px solid #ddd;
       padding-bottom: 2px;
-      border-bottom: 1px solid rgba(0,0,0,0.15);
-      color: #555;
+      margin-bottom: 2px;
     }
 
-    /* ── BINDING ROWS ── */
     .binding {
       display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      margin-bottom: 6px;
-      padding: 5px 7px;
-      border-radius: 5px;
-      background: rgba(255,255,255,0.7);
-      border-left: 4px solid transparent;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 10px;
+      border-radius: 7px;
+      background: #f7f7f7;
+      border-left: 6px solid #ccc;
     }
 
-    .binding:hover { opacity: 0.9; }
-
-    /* Left border colors per button */
-    .btn-a  { border-color: #4caf50; }
-    .btn-b  { border-color: #f44336; }
-    .btn-x  { border-color: #2196f3; }
-    .btn-y  { border-color: #ff9800; }
-    .btn-lb { border-color: #9c27b0; }
-    .btn-rb { border-color: #9c27b0; }
-    .axis   { border-color: #607d8b; }
-    .btn-combo { border-color: #795548; }
-
-    /* ── BUTTON BADGES ── */
-    .btn-badge {
+    .bb {
       flex-shrink: 0;
-      font-size: 10px;
-      font-weight: bold;
-      padding: 3px 7px;
-      border-radius: 4px;
-      color: white;
-      min-width: 50px;
-      text-align: center;
-      line-height: 1.4;
-    }
-
-    .badge-a  { background: #4caf50; }
-    .badge-b  { background: #f44336; }
-    .badge-x  { background: #2196f3; }
-    .badge-y  { background: #ff9800; color: #222; }
-    .badge-lb, .badge-rb { background: #7b1fa2; }
-    .badge-axis { background: #546e7a; font-size: 9px; }
-    .badge-combo { background: #5d4037; font-size: 9px; }
-    .badge-dpad  { background: #00796b; font-size: 9px; }
-    .btn-dpad    { border-color: #00796b; }
-
-    /* ── DESCRIPTION TEXT ── */
-    .desc {
-      flex: 1;
-    }
-    .desc strong {
-      display: block;
-      font-size: 12px;
-      color: #222;
-      line-height: 1.3;
-    }
-    .desc small {
-      font-size: 10px;
-      color: #666;
-      display: block;
-      margin-top: 1px;
-    }
-
-    /* ── TOGGLE TAG ── */
-    .tag {
-      font-size: 9px;
-      padding: 1px 5px;
-      border-radius: 3px;
-      font-weight: bold;
-      flex-shrink: 0;
-      align-self: center;
-    }
-    .tag-toggle { background: #ede7f6; color: #512da8; }
-    .tag-hold   { background: #e8f5e9; color: #2e7d32; }
-    .tag-instant{ background: #e3f2fd; color: #1565c0; }
-
-    /* ── DRIVE AXES BOX ── */
-    .axes-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 5px;
-      margin-bottom: 4px;
-    }
-    .axis-card {
-      background: rgba(255,255,255,0.8);
-      border: 1px solid #b0bec5;
-      border-radius: 5px;
-      padding: 5px 8px;
-      font-size: 11px;
-    }
-    .axis-card .axis-name {
-      font-weight: bold;
-      font-size: 10px;
-      color: #37474f;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .axis-card .axis-action {
-      color: #1a1a1a;
-      margin-top: 2px;
-    }
-    .axis-note {
-      font-size: 9px;
-      color: #78909c;
-      margin-top: 1px;
-    }
-
-    /* ── FOOTER ── */
-    .footer {
-      background: #1a1a2e;
-      color: #aaa;
-      text-align: center;
-      font-size: 10px;
-      padding: 7px;
-      letter-spacing: 1px;
-    }
-    .footer strong { color: #e94560; }
-
-    /* ── NOTES BOX ── */
-    .notes-bar {
-      background: #fff8e1;
-      border-top: 2px solid #ffd54f;
-      padding: 8px 16px;
-      display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-    .note-item {
-      font-size: 10px;
-      color: #555;
       display: flex;
       align-items: center;
-      gap: 5px;
+      justify-content: center;
+      color: white;
+      font-weight: 900;
+      border: 3px solid rgba(0,0,0,0.18);
     }
-    .note-item .dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
+    .bb-round { border-radius: 50%; width: 46px; height: 46px; font-size: 20px; }
+    .bb-pill  { border-radius: 8px; height: 38px; min-width: 60px; padding: 0 12px; font-size: 14px; }
+
+    .bg-a  { background: #2e7d32; } .bl-a  { border-color: #2e7d32; }
+    .bg-b  { background: #b71c1c; } .bl-b  { border-color: #b71c1c; }
+    .bg-x  { background: #1565c0; } .bl-x  { border-color: #1565c0; }
+    .bg-y  { background: #e65100; } .bl-y  { border-color: #e65100; }
+    .bg-lb { background: #6a1b9a; } .bl-lb { border-color: #6a1b9a; }
+    .bg-rb { background: #6a1b9a; } .bl-rb { border-color: #6a1b9a; }
+    .bg-ax   { background: #37474f; } .bl-ax   { border-color: #37474f; }
+    .bg-dpad { background: #f57f17; } .bl-dpad { border-color: #f57f17; }
+
+    .desc { flex: 1; }
+    .desc .act { font-size: 20px; font-weight: 900; color: #111; line-height: 1.1; }
+    .desc .det { font-family: Arial, sans-serif; font-size: 11px; color: #666; margin-top: 2px; }
+
+    .tag {
+      font-family: Arial, sans-serif;
+      font-size: 10px; font-weight: bold;
+      padding: 2px 7px; border-radius: 4px; flex-shrink: 0;
+    }
+    .tag-toggle  { background: #ede7f6; color: #512da8; }
+    .tag-instant { background: #e3f2fd; color: #1565c0; }
+    .tag-hold    { background: #fff3e0; color: #e65100; }
+
+    /* FOOTER */
+    .page-footer {
+      height: 26px;
+      background: #111;
+      color: #777;
+      font-family: Arial, sans-serif;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       flex-shrink: 0;
     }
+    .page-footer span { color: #e94560; margin: 0 4px; }
   </style>
 </head>
 <body>
+
+<!-- =====================================================
+     PAGE 1 — DRIVER  (Port 0)
+====================================================== -->
 <div class="page">
-
-  <!-- HEADER -->
-  <div class="header">
-    <div class="team-num">TEAM 219 &nbsp;·&nbsp; WEST HARTFORD</div>
-    <h1>Driver Station Quick Reference</h1>
-    <p>2026 Competition Season &nbsp;·&nbsp; Print and keep at driver station</p>
+  <div class="page-header driver-hdr">
+    <h1>&#127918; Driver Controller</h1>
+    <div class="hdr-team">Team 219 &mdash; Warren Hills &nbsp;&#xB7;&nbsp; 2026</div>
+    <div class="hdr-port">USB Port 0</div>
   </div>
 
-  <!-- CONTROLLER PANELS -->
-  <div class="controllers">
+  <div class="page-body">
 
-    <!-- ═══════════════════════════════════════════════
-         DRIVER CONTROLLER  (Port 0)
-    ════════════════════════════════════════════════ -->
-    <div class="controller-panel driver-panel">
-      <div class="panel-title driver-title">
-        <span>&#127918; Driver</span>
-        <span class="port-badge">USB Port 0</span>
-      </div>
+    <!-- Controller diagram with annotations -->
+    <div class="ctrl-col">
+      <!--
+        Xbox_Controller.svg coordinate system:
+        The SVG layer has transform="translate(-11.035862,-267.29676)"
+        So viewport_x = path_x - 11,  viewport_y = path_y - 267
+        Measured button centers (viewport coords, 744x500):
+          LT: (207, 83)   LB: (207, 112)
+          RT: (559, 83)   RB: (559, 112)
+          Left Stick: (371, 247)   Right Stick: (467, 353)
+          A: (572, 293)   B: (627, 246)   X: (519, 254)   Y: (576, 208)
+          D-pad: (290, 355)
+      -->
+      <svg viewBox="0 0 744 500" width="100%" style="max-height:100%;" xmlns="http://www.w3.org/2000/svg">
 
-      <!-- DRIVE AXES -->
-      <div class="section-label">Drivetrain — Field-Centric Swerve</div>
-      <div class="axes-grid">
-        <div class="axis-card">
-          <div class="axis-name">Left Stick Y</div>
-          <div class="axis-action">Forward / Backward</div>
-          <div class="axis-note">Squared response &nbsp;|&nbsp; 20% deadband</div>
-        </div>
-        <div class="axis-card">
-          <div class="axis-name">Left Stick X</div>
-          <div class="axis-action">Strafe Left / Right</div>
-          <div class="axis-note">Squared response &nbsp;|&nbsp; 20% deadband</div>
-        </div>
-        <div class="axis-card">
-          <div class="axis-name">Right Stick X</div>
-          <div class="axis-action">Rotate (Yaw)</div>
-          <div class="axis-note">Squared response &nbsp;|&nbsp; 20% deadband</div>
-        </div>
-        <div class="axis-card" style="border-color:#7b1fa2;">
-          <div class="axis-name" style="color:#6a1b9a;">Left Bumper (LB)</div>
-          <div class="axis-action" style="font-weight:bold;">Reset Field-Centric Heading</div>
-          <div class="axis-note">Press once to re-zero forward direction</div>
-        </div>
-      </div>
+        <!-- Base controller image -->
+        <image href="Xbox_Controller.svg" x="0" y="0" width="744" height="500"/>
 
-      <!-- MECHANISM BUTTONS -->
-      <div class="section-label">Mechanism Controls</div>
+        <!-- ── DRIVER PAGE ANNOTATIONS ── -->
 
-      <div class="binding btn-a">
-        <div class="btn-badge badge-a">A</div>
-        <div class="desc">
-          <strong>Drop Harvester, Ground Harvester &amp; Agitator</strong>
-          <small>Runs drop harvester + ground intake + agitator simultaneously</small>
-        </div>
-        <span class="tag tag-toggle">TOGGLE</span>
-      </div>
+        <!-- LEFT BUMPER highlight (reset heading) -->
+        <rect x="152" y="97" width="112" height="28" rx="10"
+              fill="#9c27b0" fill-opacity="0.35"
+              stroke="#e040fb" stroke-width="3" stroke-opacity="0.9"/>
+        <!-- LB callout line to top-left label -->
+        <line x1="188" y1="97" x2="188" y2="68" stroke="#e040fb" stroke-width="2" stroke-dasharray="5,3"/>
+        <rect x="100" y="38" width="178" height="30" rx="6"
+              fill="#4a148c" fill-opacity="0.92"/>
+        <text x="189" y="50" text-anchor="middle" fill="white" font-size="13" font-family="Arial" font-weight="bold">LB &#8212; RESET HEADING</text>
+        <text x="189" y="63" text-anchor="middle" fill="#ce93d8" font-size="10" font-family="Arial">Re-zeros forward direction</text>
 
-      <div class="binding btn-b">
-        <div class="btn-badge badge-b">B</div>
-        <div class="desc">
-          <strong>Vision — Face Hub Tag</strong>
-          <small>Auto-rotates to aim at nearest hub AprilTag (tags 9, 10, 25, 26)</small>
-        </div>
-        <span class="tag tag-hold">HOLD</span>
-      </div>
+        <!-- LEFT STICK highlight (drive) -->
+        <circle cx="371" cy="247" r="42"
+                fill="#1565c0" fill-opacity="0.3"
+                stroke="#42a5f5" stroke-width="4" stroke-opacity="0.9"/>
+        <!-- Left stick label below stick -->
+        <rect x="294" y="302" width="154" height="40" rx="6"
+              fill="#0d47a1" fill-opacity="0.88"/>
+        <text x="371" y="317" text-anchor="middle" fill="white" font-size="14" font-family="Arial" font-weight="bold">LEFT STICK &#8212; DRIVE</text>
+        <text x="371" y="333" text-anchor="middle" fill="#90caf9" font-size="10" font-family="Arial">Y-axis: Fwd/Back &#xB7; X-axis: Strafe L/R</text>
+        <line x1="371" y1="289" x2="371" y2="302" stroke="#42a5f5" stroke-width="2" stroke-dasharray="4,3"/>
 
-      <!-- SPEED CONTROL -->
-      <div class="section-label">Speed Control</div>
+        <!-- RIGHT STICK highlight (rotate) -->
+        <circle cx="467" cy="353" r="42"
+                fill="#37474f" fill-opacity="0.3"
+                stroke="#90a4ae" stroke-width="4" stroke-opacity="0.9"/>
+        <!-- Right stick label below (bottom of SVG area) -->
+        <rect x="394" y="408" width="146" height="30" rx="6"
+              fill="#263238" fill-opacity="0.88"/>
+        <text x="467" y="420" text-anchor="middle" fill="white" font-size="13" font-family="Arial" font-weight="bold">R-STICK X &#8212; ROTATE</text>
+        <text x="467" y="432" text-anchor="middle" fill="#90a4ae" font-size="10" font-family="Arial">Field-centric yaw</text>
+        <line x1="467" y1="395" x2="467" y2="408" stroke="#90a4ae" stroke-width="2" stroke-dasharray="4,3"/>
 
-      <div class="binding btn-dpad">
-        <div class="btn-badge badge-dpad">D-PAD<br>LEFT</div>
-        <div class="desc">
-          <strong>Speed Boost</strong>
-          <small>Sets drive speed to 1.5× base (press once)</small>
-        </div>
-        <span class="tag tag-instant">INSTANT</span>
-      </div>
+        <!-- A BUTTON highlight (drop harvest + agitator) -->
+        <circle cx="572" cy="293" r="26"
+                fill="#2e7d32" fill-opacity="0.45"
+                stroke="#66bb6a" stroke-width="4" stroke-opacity="0.95"/>
+        <!-- A callout line going right -->
+        <line x1="598" y1="293" x2="636" y2="293" stroke="#66bb6a" stroke-width="2" stroke-dasharray="4,3"/>
+        <rect x="636" y="274" width="105" height="38" rx="5"
+              fill="#1b5e20" fill-opacity="0.92"/>
+        <text x="688" y="289" text-anchor="middle" fill="white" font-size="12" font-family="Arial" font-weight="bold">A &#8212; ALL HARVEST</text>
+        <text x="688" y="303" text-anchor="middle" fill="#a5d6a7" font-size="10" font-family="Arial">Drop + Ground + Agit (toggle)</text>
 
-      <div class="binding btn-dpad">
-        <div class="btn-badge badge-dpad">D-PAD<br>DOWN</div>
-        <div class="desc">
-          <strong>Reset to Normal Speed</strong>
-          <small>Returns drive speed to base (press once)</small>
-        </div>
-        <span class="tag tag-instant">INSTANT</span>
-      </div>
+        <!-- B BUTTON highlight (face hub / vision aim) -->
+        <circle cx="627" cy="246" r="26"
+                fill="#b71c1c" fill-opacity="0.45"
+                stroke="#ef9a9a" stroke-width="4" stroke-opacity="0.95"/>
+        <!-- B callout line going right -->
+        <line x1="653" y1="246" x2="686" y2="222" stroke="#ef9a9a" stroke-width="2" stroke-dasharray="4,3"/>
+        <rect x="636" y="202" width="105" height="38" rx="5"
+              fill="#b71c1c" fill-opacity="0.92"/>
+        <text x="688" y="217" text-anchor="middle" fill="white" font-size="12" font-family="Arial" font-weight="bold">B &#8212; FACE HUB</text>
+        <text x="688" y="231" text-anchor="middle" fill="#ffcdd2" font-size="10" font-family="Arial">Auto-aim (hold)</text>
 
-      <!-- SYS ID (hidden/dev) -->
-      <div class="section-label">Engineering / Tuning Only</div>
+        <!-- D-PAD LEFT highlight (speed boost) -->
+        <rect x="253" y="347" width="24" height="16" rx="4"
+              fill="#f57f17" fill-opacity="0.45"
+              stroke="#f57f17" stroke-width="2.5" stroke-opacity="0.95"/>
+        <line x1="263" y1="363" x2="90" y2="418" stroke="#f57f17" stroke-width="2" stroke-dasharray="4,3"/>
+        <rect x="4" y="413" width="175" height="30" rx="5"
+              fill="#e65100" fill-opacity="0.90"/>
+        <text x="91" y="426" text-anchor="middle" fill="white" font-size="12" font-family="Arial" font-weight="bold">D-LEFT &#8212; SPEED BOOST</text>
+        <text x="91" y="439" text-anchor="middle" fill="#ffcc80" font-size="10" font-family="Arial">1.5&#xD7; base speed (50% &#8594; 75% max)</text>
 
-      <div class="binding btn-combo">
-        <div class="btn-badge badge-combo">BACK<br>+ Y</div>
-        <div class="desc">
-          <strong>SysId Dynamic — Forward</strong>
-          <small>Drivetrain system identification</small>
-        </div>
-        <span class="tag tag-hold">HOLD</span>
-      </div>
+        <!-- D-PAD DOWN highlight (speed reset) -->
+        <rect x="284" y="364" width="16" height="24" rx="4"
+              fill="#2e7d32" fill-opacity="0.45"
+              stroke="#4caf50" stroke-width="2.5" stroke-opacity="0.95"/>
+        <line x1="292" y1="388" x2="100" y2="453" stroke="#4caf50" stroke-width="2" stroke-dasharray="4,3"/>
+        <rect x="4" y="448" width="175" height="30" rx="5"
+              fill="#1b5e20" fill-opacity="0.90"/>
+        <text x="91" y="461" text-anchor="middle" fill="white" font-size="12" font-family="Arial" font-weight="bold">D-DOWN &#8212; RESET SPEED</text>
+        <text x="91" y="474" text-anchor="middle" fill="#a5d6a7" font-size="10" font-family="Arial">Back to 50% base speed</text>
 
-      <div class="binding btn-combo">
-        <div class="btn-badge badge-combo">BACK<br>+ X</div>
-        <div class="desc">
-          <strong>SysId Dynamic — Reverse</strong>
-          <small>Drivetrain system identification</small>
-        </div>
-        <span class="tag tag-hold">HOLD</span>
-      </div>
+        <!-- Drive speed note box (top-left corner, above LB area) -->
+        <rect x="4" y="4" width="142" height="30" rx="5"
+              fill="#f9a825" fill-opacity="0.9"/>
+        <text x="75" y="16" text-anchor="middle" fill="#111" font-size="10" font-family="Arial" font-weight="bold">MAX SPEED: 50%</text>
+        <text x="75" y="28" text-anchor="middle" fill="#333" font-size="9" font-family="Arial">Rotation: 0.75 rot/sec &#xB7; Deadband: 20%</text>
 
-      <div class="binding btn-combo">
-        <div class="btn-badge badge-combo">START<br>+ Y</div>
-        <div class="desc">
-          <strong>SysId Quasistatic — Forward</strong>
-          <small>Drivetrain system identification</small>
-        </div>
-        <span class="tag tag-hold">HOLD</span>
-      </div>
-
-      <div class="binding btn-combo">
-        <div class="btn-badge badge-combo">START<br>+ X</div>
-        <div class="desc">
-          <strong>SysId Quasistatic — Reverse</strong>
-          <small>Drivetrain system identification</small>
-        </div>
-        <span class="tag tag-hold">HOLD</span>
-      </div>
-
-    </div><!-- /driver-panel -->
-
-
-    <!-- ═══════════════════════════════════════════════
-         OPERATOR CONTROLLER  (Port 1)
-    ════════════════════════════════════════════════ -->
-    <div class="controller-panel operator-panel">
-      <div class="panel-title operator-title">
-        <span>&#9881;&#65039; Operator</span>
-        <span class="port-badge">USB Port 1</span>
-      </div>
-
-      <!-- SHOOTING -->
-      <div class="section-label">Shooting</div>
-
-      <div class="binding btn-x">
-        <div class="btn-badge badge-x">X</div>
-        <div class="desc">
-          <strong>Close-Range Shot</strong>
-          <small>Shooter at 83% power &nbsp;·&nbsp; ~9 ft 5 in range</small>
-        </div>
-        <span class="tag tag-toggle">TOGGLE</span>
-      </div>
-
-      <div class="binding btn-rb">
-        <div class="btn-badge badge-rb">RB</div>
-        <div class="desc">
-          <strong>Long-Range Shot</strong>
-          <small>Shooter at 100% power &nbsp;·&nbsp; full distance</small>
-        </div>
-        <span class="tag tag-toggle">TOGGLE</span>
-      </div>
-
-      <div class="binding btn-lb">
-        <div class="btn-badge badge-lb">LB</div>
-        <div class="desc">
-          <strong>Closer Shot</strong>
-          <small>Shooter at close-range power &nbsp;·&nbsp; shortest distance</small>
-        </div>
-        <span class="tag tag-toggle">TOGGLE</span>
-      </div>
-
-      <div class="binding btn-a">
-        <div class="btn-badge badge-a">A</div>
-        <div class="desc">
-          <strong>Run Trigger / Feed</strong>
-          <small>Feeds note into shooter (trigger + agitator)</small>
-        </div>
-        <span class="tag tag-toggle">TOGGLE</span>
-      </div>
-
-      <!-- HARVESTER POSITION -->
-      <div class="section-label">Drop Harvester Position</div>
-
-      <div class="binding btn-y">
-        <div class="btn-badge badge-y">Y</div>
-        <div class="desc">
-          <strong>Raise Drop Harvester (for dump)</strong>
-          <small>Lifts harvester to dump/stow position &nbsp;·&nbsp; auto-stops at limit switch</small>
-        </div>
-        <span class="tag tag-instant">INSTANT</span>
-      </div>
-
-      <div class="binding btn-b">
-        <div class="btn-badge badge-b">B</div>
-        <div class="desc">
-          <strong>Lower Drop Harvester</strong>
-          <small>Drops harvester to deploy position &nbsp;·&nbsp; auto-stops at limit switch</small>
-        </div>
-        <span class="tag tag-instant">INSTANT</span>
-      </div>
-
-      <div class="binding btn-dpad">
-        <div class="btn-badge badge-dpad">D-PAD<br>LEFT</div>
-        <div class="desc">
-          <strong>Raise Harvester</strong>
-          <small>Alternate raise command (stow position)</small>
-        </div>
-        <span class="tag tag-instant">INSTANT</span>
-      </div>
-
-      <!-- BLANK SPACE TO BALANCE LAYOUT -->
-      <div style="height: 12px;"></div>
-
-      <!-- SHOOTING WORKFLOW GUIDE -->
-      <div style="background:#fff3e0; border:1px solid #ffb74d; border-radius:6px; padding:9px 11px; margin-top:6px;">
-        <div style="font-size:11px; font-weight:bold; color:#e65100; margin-bottom:6px; text-transform:uppercase; letter-spacing:1px;">Shooting Workflow</div>
-        <div style="font-size:11px; color:#333; line-height:1.8;">
-          <span style="background:#ff9800; color:white; border-radius:3px; padding:1px 5px; font-weight:bold; font-size:10px;">1</span>
-          &nbsp;Spin up shooter &nbsp;<b>[X]</b>, <b>[RB]</b>, or <b>[LB]</b><br>
-          <span style="background:#ff9800; color:white; border-radius:3px; padding:1px 5px; font-weight:bold; font-size:10px;">2</span>
-          &nbsp;Confirm shooter speed is ready<br>
-          <span style="background:#ff9800; color:white; border-radius:3px; padding:1px 5px; font-weight:bold; font-size:10px;">3</span>
-          &nbsp;Press <b>[A]</b> to feed note with trigger<br>
-          <span style="background:#ff9800; color:white; border-radius:3px; padding:1px 5px; font-weight:bold; font-size:10px;">4</span>
-          &nbsp;Toggle off after note is launched
-        </div>
-      </div>
-
-    </div><!-- /operator-panel -->
-  </div><!-- /controllers -->
-
-  <!-- NOTES BAR -->
-  <div class="notes-bar">
-    <div class="note-item">
-      <div class="dot" style="background:#512da8;"></div>
-      <span><strong>TOGGLE</strong> = press once to start, press again to stop</span>
+      </svg>
     </div>
-    <div class="note-item">
-      <div class="dot" style="background:#2e7d32;"></div>
-      <span><strong>HOLD</strong> = active only while button is held</span>
-    </div>
-    <div class="note-item">
-      <div class="dot" style="background:#1565c0;"></div>
-      <span><strong>Drive speed:</strong> 50% max &nbsp;|&nbsp; <strong>Rotation:</strong> 0.75 rot/sec</span>
-    </div>
-    <div class="note-item">
-      <div class="dot" style="background:#c62828;"></div>
-      <span><strong>LB (Driver)</strong> resets heading if robot direction drifts</span>
+
+    <!-- Bindings list -->
+    <div class="bindings-col">
+      <div class="section-lbl">Drivetrain &mdash; Field-Centric Swerve</div>
+
+      <div class="binding bl-ax">
+        <div class="bb bb-pill bg-ax">L-STK</div>
+        <div class="desc">
+          <div class="act">Forward / Back &amp; Strafe</div>
+          <div class="det">Y-axis = forward/back &nbsp;&nbsp;X-axis = left/right strafe &nbsp;&nbsp;Squared response, 20% deadband</div>
+        </div>
+      </div>
+
+      <div class="binding bl-ax">
+        <div class="bb bb-pill bg-ax" style="font-size:12px;">R-STK X</div>
+        <div class="desc">
+          <div class="act">Rotate Robot</div>
+          <div class="det">Right stick left/right &nbsp;&nbsp;Field-centric — relative to field, not robot nose</div>
+        </div>
+      </div>
+
+      <div class="binding bl-lb">
+        <div class="bb bb-pill bg-lb">LB</div>
+        <div class="desc">
+          <div class="act">Reset Field-Centric Heading</div>
+          <div class="det">Press if drive direction feels wrong &nbsp;&nbsp;Re-zeros forward to current robot facing</div>
+        </div>
+        <span class="tag tag-instant">INSTANT</span>
+      </div>
+
+      <div class="section-lbl" style="margin-top:6px;">Mechanism Controls</div>
+
+      <div class="binding bl-a">
+        <div class="bb bb-round bg-a">A</div>
+        <div class="desc">
+          <div class="act">Drop + Ground Harvest + Agitator</div>
+          <div class="det">Runs all three intake mechanisms simultaneously &nbsp;&nbsp;Press again to stop all</div>
+        </div>
+        <span class="tag tag-toggle">TOGGLE</span>
+      </div>
+
+      <div class="binding bl-b">
+        <div class="bb bb-round bg-b">B</div>
+        <div class="desc">
+          <div class="act">Face Hub</div>
+          <div class="det">Rotates robot to aim at scoring hub using vision &nbsp;&nbsp;Release to resume manual rotation</div>
+        </div>
+        <span class="tag tag-hold">HOLD</span>
+      </div>
+
+      <div class="section-lbl" style="margin-top:6px;">Speed Control &mdash; D-Pad</div>
+
+      <div class="binding bl-dpad">
+        <div class="bb bb-pill bg-dpad">D &#9664;</div>
+        <div class="desc">
+          <div class="act">Speed Boost</div>
+          <div class="det">Sets drive to 1.5&times; base speed (50% &rarr; 75% max) &nbsp;&nbsp;Use for fast repositioning</div>
+        </div>
+        <span class="tag tag-instant">INSTANT</span>
+      </div>
+
+      <div class="binding bl-dpad">
+        <div class="bb bb-pill bg-dpad">D &#9660;</div>
+        <div class="desc">
+          <div class="act">Reset Speed</div>
+          <div class="det">Returns to 50% base speed &nbsp;&nbsp;Use for precise control</div>
+        </div>
+        <span class="tag tag-instant">INSTANT</span>
+      </div>
     </div>
   </div>
 
-  <!-- FOOTER -->
-  <div class="footer">
-    <strong>Team 219 &mdash; West Hartford &nbsp;</strong>
-    &nbsp;|&nbsp; WHCompCode2026 &nbsp;|&nbsp; Auto: <strong>rightPlayer</strong>
+  <div class="page-footer">
+    <span>Team 219</span> Warren Hills &nbsp;&#xB7;&nbsp; WHCompCode2026 &nbsp;&#xB7;&nbsp; Driver Reference
   </div>
-
 </div>
+
+
+<!-- =====================================================
+     PAGE 2 — OPERATOR  (Port 1)
+====================================================== -->
+<div class="page">
+  <div class="page-header operator-hdr">
+    <h1>&#9881;&#65039; Operator Controller</h1>
+    <div class="hdr-team">Team 219 &mdash; Warren Hills &nbsp;&#xB7;&nbsp; 2026</div>
+    <div class="hdr-port">USB Port 1</div>
+  </div>
+
+  <div class="page-body">
+
+    <!-- Controller diagram with annotations -->
+    <div class="ctrl-col">
+      <svg viewBox="0 0 744 500" width="100%" style="max-height:100%;" xmlns="http://www.w3.org/2000/svg">
+
+        <!-- Base controller image -->
+        <image href="Xbox_Controller.svg" x="0" y="0" width="744" height="500"/>
+
+        <!-- ── OPERATOR PAGE ANNOTATIONS ── -->
+
+        <!-- LEFT BUMPER highlight (closer shot) -->
+        <rect x="152" y="97" width="112" height="28" rx="10"
+              fill="#6a1b9a" fill-opacity="0.35"
+              stroke="#ce93d8" stroke-width="3" stroke-opacity="0.9"/>
+        <!-- LB callout line to top label -->
+        <line x1="207" y1="97" x2="246" y2="68" stroke="#ce93d8" stroke-width="2" stroke-dasharray="5,3"/>
+        <rect x="164" y="38" width="165" height="30" rx="6"
+              fill="#4a148c" fill-opacity="0.92"/>
+        <text x="246" y="50" text-anchor="middle" fill="white" font-size="13" font-family="Arial" font-weight="bold">LB &#8212; CLOSER SHOT</text>
+        <text x="246" y="63" text-anchor="middle" fill="#ce93d8" font-size="10" font-family="Arial">Shooter 68% power (toggle)</text>
+
+        <!-- RIGHT BUMPER highlight (long shot) -->
+        <rect x="500" y="97" width="118" height="28" rx="10"
+              fill="#6a1b9a" fill-opacity="0.40"
+              stroke="#ce93d8" stroke-width="3" stroke-opacity="0.95"/>
+        <!-- RB callout to top-right -->
+        <line x1="559" y1="97" x2="559" y2="68" stroke="#ce93d8" stroke-width="2" stroke-dasharray="5,3"/>
+        <rect x="468" y="38" width="182" height="30" rx="6"
+              fill="#4a148c" fill-opacity="0.92"/>
+        <text x="559" y="50" text-anchor="middle" fill="white" font-size="13" font-family="Arial" font-weight="bold">RB &#8212; LONG-RANGE SHOT</text>
+        <text x="559" y="63" text-anchor="middle" fill="#ce93d8" font-size="10" font-family="Arial">Shooter 100% power (toggle)</text>
+
+        <!-- Y BUTTON highlight (raise harvester) -->
+        <circle cx="576" cy="208" r="26"
+                fill="#e65100" fill-opacity="0.45"
+                stroke="#ffcc02" stroke-width="4" stroke-opacity="0.95"/>
+        <!-- Y callout line to left -->
+        <line x1="550" y1="208" x2="510" y2="208" stroke="#ffcc02" stroke-width="2" stroke-dasharray="4,3"/>
+        <rect x="340" y="192" width="170" height="32" rx="5"
+              fill="#bf360c" fill-opacity="0.90"/>
+        <text x="425" y="205" text-anchor="middle" fill="white" font-size="12" font-family="Arial" font-weight="bold">Y &#8212; RAISE HARVESTER</text>
+        <text x="425" y="218" text-anchor="middle" fill="#ffcc80" font-size="10" font-family="Arial">Raises to dump/scoring position</text>
+
+        <!-- X BUTTON highlight (close shot) -->
+        <circle cx="519" cy="254" r="26"
+                fill="#1565c0" fill-opacity="0.45"
+                stroke="#42a5f5" stroke-width="4" stroke-opacity="0.95"/>
+        <!-- X callout line to left -->
+        <line x1="493" y1="254" x2="460" y2="254" stroke="#42a5f5" stroke-width="2" stroke-dasharray="4,3"/>
+        <rect x="280" y="238" width="180" height="32" rx="5"
+              fill="#0d47a1" fill-opacity="0.90"/>
+        <text x="370" y="251" text-anchor="middle" fill="white" font-size="12" font-family="Arial" font-weight="bold">X &#8212; CLOSE-RANGE SHOT</text>
+        <text x="370" y="265" text-anchor="middle" fill="#90caf9" font-size="10" font-family="Arial">Shooter 83% &#xB7; ~9 ft 5 in (toggle)</text>
+
+        <!-- B BUTTON highlight (lower harvester) -->
+        <circle cx="627" cy="246" r="26"
+                fill="#b71c1c" fill-opacity="0.45"
+                stroke="#ef9a9a" stroke-width="4" stroke-opacity="0.95"/>
+        <!-- B callout line going down-right -->
+        <line x1="645" y1="262" x2="665" y2="310" stroke="#ef9a9a" stroke-width="2" stroke-dasharray="4,3"/>
+        <rect x="558" y="310" width="183" height="32" rx="5"
+              fill="#b71c1c" fill-opacity="0.90"/>
+        <text x="649" y="323" text-anchor="middle" fill="white" font-size="12" font-family="Arial" font-weight="bold">B &#8212; LOWER HARVESTER</text>
+        <text x="649" y="337" text-anchor="middle" fill="#ffcdd2" font-size="10" font-family="Arial">Auto-stops at bottom limit switch</text>
+
+        <!-- A BUTTON highlight (run trigger / feed) -->
+        <circle cx="572" cy="293" r="26"
+                fill="#2e7d32" fill-opacity="0.45"
+                stroke="#66bb6a" stroke-width="4" stroke-opacity="0.95"/>
+        <!-- A callout line going down-left -->
+        <line x1="556" y1="312" x2="500" y2="358" stroke="#66bb6a" stroke-width="2" stroke-dasharray="4,3"/>
+        <rect x="348" y="358" width="152" height="32" rx="5"
+              fill="#1b5e20" fill-opacity="0.90"/>
+        <text x="424" y="371" text-anchor="middle" fill="white" font-size="12" font-family="Arial" font-weight="bold">A &#8212; RUN TRIGGER</text>
+        <text x="424" y="385" text-anchor="middle" fill="#a5d6a7" font-size="10" font-family="Arial">Feed note into shooter (toggle)</text>
+
+        <!-- Shooting sequence box (top-left corner) -->
+        <rect x="4" y="4" width="160" height="160" rx="8"
+              fill="#fff8e1" fill-opacity="0.96" stroke="#f9a825" stroke-width="2"/>
+        <text x="84" y="20" text-anchor="middle" fill="#e65100" font-size="12" font-family="Arial" font-weight="bold">SHOOT SEQUENCE</text>
+        <circle cx="20" cy="40" r="9" fill="#e65100"/>
+        <text x="20" y="45" text-anchor="middle" fill="white" font-size="10" font-family="Arial" font-weight="bold">1</text>
+        <text x="36" y="37" fill="#333" font-size="11" font-family="Arial" font-weight="bold">Spin up shooter</text>
+        <text x="36" y="50" fill="#666" font-size="10" font-family="Arial">Press [X], [LB] or [RB]</text>
+        <circle cx="20" cy="72" r="9" fill="#e65100"/>
+        <text x="20" y="77" text-anchor="middle" fill="white" font-size="10" font-family="Arial" font-weight="bold">2</text>
+        <text x="36" y="69" fill="#333" font-size="11" font-family="Arial" font-weight="bold">Wait for speed</text>
+        <text x="36" y="82" fill="#666" font-size="10" font-family="Arial">Check SmartDashboard</text>
+        <circle cx="20" cy="104" r="9" fill="#e65100"/>
+        <text x="20" y="109" text-anchor="middle" fill="white" font-size="10" font-family="Arial" font-weight="bold">3</text>
+        <text x="36" y="101" fill="#333" font-size="11" font-family="Arial" font-weight="bold">Feed note</text>
+        <text x="36" y="114" fill="#666" font-size="10" font-family="Arial">Press [A] to run trigger</text>
+        <circle cx="20" cy="136" r="9" fill="#e65100"/>
+        <text x="20" y="141" text-anchor="middle" fill="white" font-size="10" font-family="Arial" font-weight="bold">4</text>
+        <text x="36" y="133" fill="#333" font-size="11" font-family="Arial" font-weight="bold">Toggle off after shot</text>
+        <text x="36" y="146" fill="#666" font-size="10" font-family="Arial">Press same button again</text>
+
+        <!-- Toggle reminder -->
+        <rect x="4" y="174" width="160" height="24" rx="5"
+              fill="#ede7f6" fill-opacity="0.95" stroke="#9c27b0" stroke-width="1.5"/>
+        <text x="84" y="183" text-anchor="middle" fill="#4a148c" font-size="10" font-family="Arial" font-weight="bold">TOGGLE: X, LB, RB, A</text>
+        <text x="84" y="193" text-anchor="middle" fill="#7b1fa2" font-size="9" font-family="Arial">INSTANT (one press): Y, B, D-PAD</text>
+
+      </svg>
+    </div>
+
+    <!-- Bindings list -->
+    <div class="bindings-col">
+      <div class="section-lbl">Shooting</div>
+
+      <div class="binding bl-x">
+        <div class="bb bb-round bg-x">X</div>
+        <div class="desc">
+          <div class="act">Close-Range Shot</div>
+          <div class="det">Shooter at 83% power &nbsp;&nbsp;Tuned for ~9 ft 5 in &nbsp;&nbsp;Press again to stop</div>
+        </div>
+        <span class="tag tag-toggle">TOGGLE</span>
+      </div>
+
+      <div class="binding bl-lb">
+        <div class="bb bb-pill bg-lb">LB</div>
+        <div class="desc">
+          <div class="act">Closer Shot</div>
+          <div class="det">Shooter at 68% power &nbsp;&nbsp;Short-range / closer than X &nbsp;&nbsp;Press again to stop</div>
+        </div>
+        <span class="tag tag-toggle">TOGGLE</span>
+      </div>
+
+      <div class="binding bl-rb">
+        <div class="bb bb-pill bg-rb">RB</div>
+        <div class="desc">
+          <div class="act">Long-Range Shot</div>
+          <div class="det">Shooter at 100% power &nbsp;&nbsp;Maximum distance &nbsp;&nbsp;Press again to stop</div>
+        </div>
+        <span class="tag tag-toggle">TOGGLE</span>
+      </div>
+
+      <div class="binding bl-a">
+        <div class="bb bb-round bg-a">A</div>
+        <div class="desc">
+          <div class="act">Run Trigger &amp; Feed</div>
+          <div class="det">Feeds note into shooter &nbsp;&nbsp;Use AFTER spinning up shooter &nbsp;&nbsp;Press again to stop</div>
+        </div>
+        <span class="tag tag-toggle">TOGGLE</span>
+      </div>
+
+      <div class="section-lbl" style="margin-top:6px;">Harvester Position</div>
+
+      <div class="binding bl-y">
+        <div class="bb bb-round bg-y">Y</div>
+        <div class="desc">
+          <div class="act">Raise Drop Harvester</div>
+          <div class="det">Raises to dump/scoring position &nbsp;&nbsp;Stops at limit switch</div>
+        </div>
+        <span class="tag tag-instant">INSTANT</span>
+      </div>
+
+      <div class="binding bl-b">
+        <div class="bb bb-round bg-b">B</div>
+        <div class="desc">
+          <div class="act">Lower Drop Harvester</div>
+          <div class="det">Drops to deploy position &nbsp;&nbsp;Auto-stops at bottom limit switch</div>
+        </div>
+        <span class="tag tag-instant">INSTANT</span>
+      </div>
+
+      <div class="binding bl-dpad">
+        <div class="bb bb-pill bg-dpad">D &#9664;</div>
+        <div class="desc">
+          <div class="act">Raise Harvester</div>
+          <div class="det">Alternate raise to stow/travel position &nbsp;&nbsp;Stops at limit switch</div>
+        </div>
+        <span class="tag tag-instant">INSTANT</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Team 219</span> Warren Hills &nbsp;&#xB7;&nbsp; WHCompCode2026 &nbsp;&#xB7;&nbsp; Operator Reference &nbsp;&#xB7;&nbsp; Auto: <span>rightPlayer</span>
+  </div>
+</div>
+
 </body>
 </html>

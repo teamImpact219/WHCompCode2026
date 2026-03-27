@@ -8,6 +8,10 @@ import frc.robot.subsystems.UniCamVisionSubsystem;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 //util imports
 import java.util.ArrayList;
+import java.util.Optional;
+//team imports
+import edu.wpi.first.wpilibj.DriverStation;
+
 //tag imports
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
@@ -26,9 +30,9 @@ public class uniCamTurnToTagCommand extends Command {
   //constructor
   public uniCamTurnToTagCommand(
     int id, UniCamVisionSubsystem vision,
-     CommandSwerveDrivetrain drivetrain, 
-     SwerveRequest.FieldCentric driveCommand
-     ) 
+    CommandSwerveDrivetrain drivetrain, 
+    SwerveRequest.FieldCentric driveCommand
+    ) 
   {
     //reqs
     addRequirements(drivetrain);
@@ -70,5 +74,24 @@ public class uniCamTurnToTagCommand extends Command {
     return 
     foundTag &&
     Math.abs(targetYaw) < Math.PI/50.0;
+  }
+
+  //handles instantiation but also accounts for team color/side
+  public static uniCamTurnToTagCommand instantiateObject(
+    int id_red, int id_blue, int id_backup, UniCamVisionSubsystem vision,
+    CommandSwerveDrivetrain drivetrain, 
+    SwerveRequest.FieldCentric driveCommand
+  ){
+    Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
+    if (alliance.isPresent()){
+      if (alliance.get() == DriverStation.Alliance.Red){
+        return new uniCamTurnToTagCommand(id_red, vision, drivetrain, driveCommand);
+      }
+      //blue otherwise, theres no other teams
+      else{
+        return new uniCamTurnToTagCommand(id_blue, vision, drivetrain, driveCommand);
+      }
+    }
+        return new uniCamTurnToTagCommand(id_backup, vision, drivetrain, driveCommand);
   }
 }

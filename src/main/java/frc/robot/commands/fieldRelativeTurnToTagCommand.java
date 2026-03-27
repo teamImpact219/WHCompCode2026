@@ -9,6 +9,8 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 //position imports
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.wpilibj.DriverStation;
+
 //util imports
 import java.util.Optional;
 import java.lang.Math;
@@ -68,12 +70,26 @@ public class fieldRelativeTurnToTagCommand extends Command {
     }
   }
   @Override
-  public void end(boolean interrupted) {
-      drivetrain.setControl(driveCommand.withRotationalRate(0)); 
-
-
-  }
+  public void end(boolean interrupted) {drivetrain.setControl(driveCommand.withRotationalRate(0)); }
   
   @Override
   public boolean isFinished() {return !tagExists || Math.abs(error) < Math.PI/180.0;}
+
+  //handles instantiation but also accounts for team color/side
+  public static fieldRelativeTurnToTagCommand instantiateObject(
+    CommandSwerveDrivetrain drivetrain,SwerveRequest.FieldCentric driveCommand,
+    int id_red, int id_blue, int id_backup
+  ){
+    Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
+    if (alliance.isPresent()){
+      if (alliance.get() == DriverStation.Alliance.Red){
+        return new fieldRelativeTurnToTagCommand(drivetrain, driveCommand, id_red);
+      }
+      //blue otherwise, theres no other teams
+      else{
+        return new fieldRelativeTurnToTagCommand(drivetrain, driveCommand, id_blue);
+      }
+    }
+        return new fieldRelativeTurnToTagCommand(drivetrain, driveCommand, id_backup);
+  }
 }

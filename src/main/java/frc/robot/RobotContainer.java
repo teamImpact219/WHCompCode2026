@@ -26,6 +26,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 //import com.pathplanner.lib.commands.FollowPathCommand;
 import com.pathplanner.lib.commands.*;
 
+import frc.robot.commands.fieldRelativeTurnToTagCommand;
 import frc.robot.commands.uniCamSuggestVisionEstimationCommand;
 import frc.robot.commands.uniCamTurnToTagCommand;
 import frc.robot.generated.TunerConstants3;
@@ -81,12 +82,12 @@ public class RobotContainer extends SubsystemBase{
 
     private final CommandXboxController driverController = new CommandXboxController(0);
     //VISION STUFF
-    //update the cameras position
+    //update the cameras position and turn to IDs for each of the commands lol
     //trun to (button b) goes wtih co driver controller 
     public final UniCamVisionSubsystem vision = new UniCamVisionSubsystem("ACER_HD_User_Facing", new Transform3d());
-    public final uniCamTurnToTagCommand turnToCommand = new uniCamTurnToTagCommand(0, vision, drivetrain, drive);
     public final uniCamSuggestVisionEstimationCommand visionEstimation = new uniCamSuggestVisionEstimationCommand(drivetrain, vision);
-
+    public final uniCamTurnToTagCommand turnToCommand = uniCamTurnToTagCommand.instantiateObject(0, 0, 0, vision, drivetrain, drive);
+    public final fieldRelativeTurnToTagCommand fieldRelTurnToCommand = fieldRelativeTurnToTagCommand.instantiateObject(drivetrain, drive, 0, 0, 0)
 
 
 

@@ -87,7 +87,7 @@ public class RobotContainer extends SubsystemBase{
     public final UniCamVisionSubsystem vision = new UniCamVisionSubsystem("ACER_HD_User_Facing", new Transform3d());
     public final uniCamSuggestVisionEstimationCommand visionEstimation = new uniCamSuggestVisionEstimationCommand(drivetrain, vision);
     public final uniCamTurnToTagCommand turnToCommand = uniCamTurnToTagCommand.instantiateObject(0, 0, 0, vision, drivetrain, drive);
-    public final fieldRelativeTurnToTagCommand fieldRelTurnToCommand = fieldRelativeTurnToTagCommand.instantiateObject(drivetrain, drive, 0, 0, 0)
+    public final fieldRelativeTurnToTagCommand fieldRelTurnToCommand = fieldRelativeTurnToTagCommand.instantiateObject(drivetrain, drive, 0, 0, 0);
 
 
 
